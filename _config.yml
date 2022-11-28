@@ -15,7 +15,7 @@ repository               : "GEUS-Glaciology-and-Climate/geus-glaciology-and-clim
 # teaser                   : "/assets/images/gk_logo_mini.png"
 logo                     : "/assets/images/gk_logo.png"
 # masthead_title           : 
-breadcrumbs              : false # true, false (default)
+breadcrumbs              : true # true, false (default)
 words_per_minute         : 200
 search                   : true
 # search_full_content      : # true, false (default)

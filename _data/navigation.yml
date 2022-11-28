@@ -1,9 +1,7 @@
 # main links
 main:
-  - title: "Documentation"
-    url: /categories/documentation/
-  - title: "Guides"
-    url: /categories/guides/
+  - title: "Posts"
+    url: /categories/
   - title: "pypromice"
     url: https://pypromice.readthedocs.io
   - title: "Dataverse"

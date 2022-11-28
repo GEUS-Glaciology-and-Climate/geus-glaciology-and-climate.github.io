@@ -1,6 +1,6 @@
 ---
-title: "All Posts by Year"
-permalink: /all-posts/
-layout: posts
+title: "Posts by Categories"
+permalink: /categories/
+layout: categories
 author_profile: true
 ---
