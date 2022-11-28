@@ -110,5 +110,5 @@ In this example, the action workflow will be executed when a repo release is mad
 
 ## Links
 A working example of this set-up is available to view here:
-- pypromice Dataverse entry - https://doi.org/10.22008/FK2/IPOHT5
-- pypromice GitHub repo - https://github.com/GEUS-Glaciology-and-Climate/pypromice
+- pypromice Dataverse entry - [https://doi.org/10.22008/FK2/IPOHT5](https://doi.org/10.22008/FK2/IPOHT5)
+- pypromice GitHub repo - [https://github.com/GEUS-Glaciology-and-Climate/pypromice](https://github.com/GEUS-Glaciology-and-Climate/pypromice)
