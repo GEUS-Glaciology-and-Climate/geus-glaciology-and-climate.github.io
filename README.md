@@ -1,10 +1,10 @@
-# [GEUS G&K walkthroughs and guides](https://geus-glaciology-and-climate.github.io)
+# [GEUS G&K technical documentation and guides](https://geus-glaciology-and-climate.github.io)
 
 [![LICENSE](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/mmistakes/minimal-mistakes/master/LICENSE)
 [![Jekyll](https://img.shields.io/badge/jekyll-%3E%3D%203.7-blue.svg)](https://jekyllrb.com/)
 [![Ruby gem](https://img.shields.io/gem/v/minimal-mistakes-jekyll.svg)](https://rubygems.org/gems/minimal-mistakes-jekyll)
 
-This is a space for sharing documentation and guides that are of interest to GEUS Glaciology and Climate.
+This is a space for sharing technical documentation and guides that are of interest to GEUS Glaciology and Climate.
 
 It builds on the [Minimal Mistakes](https://mmistakes.github.io/minimal-mistakes/) Jekyll theme for building personal sites, blogs, and portfolios. As the name implies, styling is purposely minimalistic to be enhanced and customized.
 

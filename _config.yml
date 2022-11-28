@@ -36,7 +36,7 @@ author:
   name             : "GEUS Glaciology & Climate"
   avatar           : "/assets/images/gk_logo.png"
   bio              : "The Department of Glaciology and Climate conducts research, monitoring and consultancy related to glaciology, climate and the environment, with one of our main activities being the monitoring of the Greenland Ice Sheet."
-  location         : "Copenhagen, DK"
+#  location         : "Copenhagen, DK"
 #   email            :
   links:
     - label: "Website"
@@ -187,8 +187,8 @@ defaults:
       layout: single
       classes: wide
       author_profile: true
-      read_time: false
-      comments: false
+      read_time: true
+      comments: true
       share: true
       related: true
   - scope:
