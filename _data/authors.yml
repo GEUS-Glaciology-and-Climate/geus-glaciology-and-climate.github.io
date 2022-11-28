@@ -1,13 +1,25 @@
+Patrick Wright:
+  name: "Patrick Wright"
+  bio: "Data scientist at GEUS"
+  avatar: "https://avatars0.githubusercontent.com/u/10144675?s=460&v=4"
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope-square"
+      url: "mailto:pajwr@geus.dk"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/patrickjwright"
+
 Penelope How:
   name: "Penelope How"
-  bio: "Data Scientist at GEUS"
+  bio: "Data scientist with a background in glaciology"
   avatar: "https://avatars0.githubusercontent.com/u/28731816?s=460&v=4"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      url: ""mailto:pho@geus.dk"
-    - label: "Website"
-      icon: "fas fa-fw fa-link"
+      url: "mailto:pho@geus.dk"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
       url: "https://github.com/PennyHow"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"

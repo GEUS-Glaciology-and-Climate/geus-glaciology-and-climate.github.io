@@ -8,13 +8,13 @@ title                    : "GEUS Glaciology & Climate"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "GEUS Glaciology & Climate"
-description              : "The Department of Glaciology and Climate conducts research, monitoring and consultancy related to glaciology, climate and the environment."
+description              : "Research, monitoring and consultancy related to glaciology, climate and the environment"
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "GEUS-Glaciology-and-Climate/geus-glaciology-and-climate.github.io"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : "/assets/images/gk_logo.png"
-masthead_title           : " "
+masthead_title           : "/assets/images/gk_logo_mini.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 200
 comments:
