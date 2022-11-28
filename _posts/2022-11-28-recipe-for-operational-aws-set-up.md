@@ -1,3 +1,4 @@
+---
 title: "Recipe for an operational PROMICE AWS set-up"
 author: Penelope How
 date: 2022-11-28 18:30
@@ -6,6 +7,7 @@ categories:
   - Documentation
 tags: 
   - aws
+---
 
 This is a walkthrough guide of the current set-up for fetching `L0 tx` messages and performing `L0` to `L3` processing on both `tx` and `raw` data collected from PROMICE automated weather stations (AWS).
 

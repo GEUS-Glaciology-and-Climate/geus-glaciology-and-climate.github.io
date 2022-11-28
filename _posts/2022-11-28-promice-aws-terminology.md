@@ -1,3 +1,4 @@
+---
 title: "PROMICE Automated Weather Station (AWS) terminology and file naming conventions"
 author: Penelope How
 date: 2022-11-28 17:00
@@ -6,6 +7,7 @@ categories:
   - Documentation
 tags: 
   - aws
+---
 
 Within the [PROMICE](https://promice.dk/) and [GC-Net](http://cires1.colorado.edu/steffen/gcnet/) monitoring programmes, we have a lot of different terminology when referring to our data processing and products. Here is an outline of this terminology.
 
