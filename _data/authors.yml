@@ -1,0 +1,14 @@
+Dr Penelope How:
+  name: "Penelope How"
+  bio: "Data Scientist at GEUS"
+  avatar: "https://avatars0.githubusercontent.com/u/28731816?s=460&v=4"
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope-square"
+      url: ""mailto:pho@geus.dk"
+    - label: "Website"
+      icon: "fas fa-fw fa-link"
+      url: "https://github.com/PennyHow"
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/DrPennyHow"
