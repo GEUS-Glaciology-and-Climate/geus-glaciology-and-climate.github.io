@@ -2,7 +2,6 @@
 # remote_theme           : "mmistakes/minimal-mistakes"
 minimal_mistakes_skin    : "dark" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
-
 # Site Settings
 locale                   : "en-US"
 title                    : "GEUS Glaciology & Climate"
@@ -62,14 +61,12 @@ google:
   search_engine_id       : # YOUR_SEARCH_ENGINE_ID
   instant_search         : # false (default), true
 
-
 # SEO Related
 google_site_verification :
 bing_site_verification   :
 naver_site_verification  :
 yandex_site_verification :
 baidu_site_verification  :
-
 
 # Social Sharing
 twitter:
@@ -86,14 +83,12 @@ social:
   name                   : # If the user or organization name differs from the site's name
   links: # An array of links to social media profiles
 
-
 # Analytics
 analytics:
   provider               : false # false (default), "google", "google-universal", "google-gtag", "custom"
   google:
     tracking_id          :
     anonymize_ip         : # true, false (default)
-
 
 # Site Author
 author:
@@ -125,7 +120,6 @@ author:
       icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
 
-
 # Site Footer
 footer:
   links:
@@ -147,7 +141,6 @@ footer:
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       # url:
-
 
 # Reading Files
 include:
@@ -187,14 +180,12 @@ keep_files:
 encoding: "utf-8"
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
-
 # Conversion
 markdown: kramdown
 highlighter: rouge
 lsi: false
 excerpt_separator: "\n\n"
 incremental: false
-
 
 # Markdown Processing
 kramdown:
@@ -207,19 +198,16 @@ kramdown:
   smart_quotes: lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
 
-
 # Sass/SCSS
 sass:
   sass_dir: _sass
   style: compressed # https://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style
-
 
 # Outputting
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
 paginate_path: /page:num/
 timezone: "Europe/Copenhagen"
-
 
 # Plugins (previously gems:)
 plugins:
@@ -229,7 +217,6 @@ plugins:
   - jekyll-feed
   - jekyll-include-cache
 
-
 # mimic GitHub Pages with --safe
 whitelist:
   - jekyll-paginate
@@ -237,7 +224,6 @@ whitelist:
   - jekyll-gist
   - jekyll-feed
   - jekyll-include-cache
-
 
 # Archives
 #  Type
@@ -250,14 +236,12 @@ whitelist:
 #  - <base_path>/categories/my-awesome-category/index.html ~> path: /categories/
 #  - <base_path>/my-awesome-category/index.html ~> path: /
 
-
 category_archive:
   type: liquid
   path: /categories/
 tag_archive:
   type: liquid
   path: /tags/
-
 
 # https://github.com/jekyll/jekyll-archives
 # jekyll-archives:
@@ -271,14 +255,12 @@ tag_archive:
 #     category: /categories/:name/
 #     tag: /tags/:name/
 
-
 # HTML Compression
 # - https://jch.penibelst.de/
 compress_html:
   clippings: all
   ignore:
     envs: development
-
 
 # Defaults
 defaults:
