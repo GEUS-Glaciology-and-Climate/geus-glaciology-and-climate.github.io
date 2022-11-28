@@ -2,8 +2,9 @@
 title: "Linking a GitHub repo to the GEUS Dataverse"
 author: Penelope How
 date: 2022-11-28 16:00
+classes: wide
 categories:
-  - walkthroughs
+  - Guides
 tags: 
   - dataverse
   - github
