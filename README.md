@@ -137,5 +137,5 @@ Or you can do this from command line as follows:
 git pull GEUS-Glaciology-and-Climate/geus-glaciology-and-climate-github.io:master myBranch
 ```
 
-#### Wait for the changes to be implemented
+### Wait for the changes to be implemented
 Once your pull request has been accepted and your post (and other file changes) has been added to the master branch, you need to wait for Github Actions to build and deploy the new pages. This can take up to 10 minutes or so. You can check [here](https://github.com/GEUS-Glaciology-and-Climate/geus-glaciology-and-climate.github.io/actions) to see how the deployment is going.
