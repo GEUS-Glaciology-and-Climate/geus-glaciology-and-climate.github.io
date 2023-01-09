@@ -121,7 +121,7 @@ Some improvements to consider in the future that could further reduce latency in
 - Change the processing to only pipe through a limited window of recent time necessary to complete processing (e.g. the time needed for smoothing procedures in `pypromice`). Perhaps just the previous week of data, rather than processing the entire station history with every hourly run. Then, take the processed recent data and append to the long-term L3 record for each station. This may require some substantial rewrites, as well as a method to enable full station history re-processing when `pypromice` code is changed.
 - Use a "data-driven" process to commence processing. For example, keep checking the email server for new messages after the top of the hour, and when 30 seconds (or maybe 1 minute) has elapsed with no new messages, commence processing.
 
-## Web pages and documentation resources
+## Web resources
 
 To see the registered GEUS stations at OSCAR/Surface, go to https://oscar.wmo.int/surface/#/search/station, under the "Organization" drop-down search for and select "GEUS", then click "Search".
 
@@ -137,11 +137,11 @@ https://confluence.ecmwf.int/display/ECC/Documentation
 
 https://confluence.ecmwf.int/display/ECC/WMO%3D32+element+table
 
-Processing steps orignally based on this example:
+Processing steps originally based on this example:
 
 https://confluence.ecmwf.int/display/UDOC/How+do+I+create+BUFR+from+a+CSV+-+ecCodes+BUFR+FAQ
 
-See here for a step-by-step guide on the eccodes set-up:
+Step-by-step guide on the eccodes set-up:
 
 https://gist.github.com/MHBalsmeier/a01ad4e07ecf467c90fad2ac7719844a
 
