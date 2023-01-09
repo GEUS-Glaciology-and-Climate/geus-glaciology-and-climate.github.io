@@ -1,6 +1,6 @@
 ---
 title: "WMO BUFR processing: background and guide"
-author: Patrick WRight
+author: Patrick Wright
 date: 2023-01-09 13:00
 classes: wide
 categories:
