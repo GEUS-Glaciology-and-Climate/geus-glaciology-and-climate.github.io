@@ -72,7 +72,9 @@ After all stations are processed in `getBUFR`, we run `bufr_wrapper.sh` which co
 
 Note that we are currently using plain ftp to complete this upload as specified by DMI. However, this is not a very secure method and we may want to consider asking DMI to switch to sftp or ssh methods in the future.
 
-### Usage of wmo_config.py
+## Setup and usage
+
+### wmo_config.py
 
 In addition to the `argparse` args in `getBUFR`, the WMO BUFR processing is intended to be controlled by editing `wmo_config.py`.
 
@@ -84,7 +86,7 @@ The station numbers we are registering in the BUFR file (listed under `shipOrMob
 
 Outside of `wmo_config.py`, note that there is also some station-specific code in `csv2bufr.setStation`. For the purposes of looking up the correct station ID in `wmo_config.ibufr_settings['station']` this section renames `THU_U2` to `THU_U`, `JAR_O` and `SWC_O` to `JAR` and `SWC`, and `CEN2` to `CEN`. This code should not need to change, but is good to be aware of.
 
-### Timestamps pickle file and usage of --dev flag
+### latest_timestamps.pickle
 
 We use a `latest_timestamps.pickle` file to keep track of the most recent timestamp for each station, and to ensure that submitted observations are:
 
@@ -103,6 +105,8 @@ The pickle file approach uses the following logic:
 
 There is no need to manually create this file. If missing it is automatically created, and it is over-written with each processing run. If you are running `getBUFR` for the first time (e.g. after setting up a fresh processing environment), the first run will not see the pickle file and will therefore create the file with the most recent timestamps (and no BUFR files are created). If subsequent runs are made before further transmissions are received, `getBUFR` will see that the times in the pickle file are the exact same as the time in the observations to be processed, so no BUFR processing will be completed. In this case, the BUFR processing will not proceed until new transmissions are received (usually the second hourly processing run).
 
+### usage of --dev flag
+
 You can run `getBUFR` with the `--dev` flag to over-ride the timestamp restrictions. This is useful for running `getBUFR` repeatedly for development, where you want to have station observations run through the full BUFR processing each time. In this case, the timestamp checking logic is modified as:
 
 ```
@@ -113,7 +117,7 @@ You can run `getBUFR` with the `--dev` flag to over-ride the timestamp restricti
 
         if (current_timestamp > latest_timestamp) and (current_timestamp > two_days_ago):
 ```
-Using the `--dev` flag, as long as you have transmissions within the last two days, observations will run through the full BUFR processing every time.
+As long as you have transmissions within the last two days, using the `--dev` flag will force all stations through the full BUFR processing.
 
 ## Data latency
 
