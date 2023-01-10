@@ -51,17 +51,9 @@ pypromice_aws
     │       getData
     │
     └───src/pypromice
-            L0toL1.py
-            L1toL2.py
-            L2toL3.py
-            __init__.py
-            aws.py
-            data_urls.csv
-            get.py
             metadata.csv
             payload_formats.csv
             payload_types.csv
-            tx.py
             variables.csv
 ```
 
@@ -161,101 +153,4 @@ This bash script can run routinely using `cron`, which can be accessed using `cr
 
 ```
 
-In our department, `l3_processor.sh` is set to run once an hour. If you intend to set-up your own operational processing then just make sure to update the directories (signified by the `USR` string).
-
-
-#### l3_processor.sh
-
-```
-#!/usr/bin/env bash
-
-source /home/USR/miniconda3/etc/profile.d/conda.sh
-conda activate py38
-echo "Running l3_processor at `/bin/date +%Y-%m-%d\ %T`"
-
-echo 'Checking for updates on aws-l0...'
-cd /mnt/data/USR/pypromice_aws/aws-l0
-git checkout main
-git pull
-
-echo "Checking for updates on aws-l3"
-cd /mnt/data/USR/pypromice_aws/aws-l3
-git checkout main
-git pull
-
-#------------------
-
-echo "Running AWS L0 raw >> L3 processing"
-
-echo "Finding recently added files..."
-cd /mnt/data/USR/pypromice_aws/aws-l0/raw/config
-station_configs=$(find . -maxdepth 1 -type f -mmin -1440 | cut -d"/" -f2)
-echo ${station_configs}
-
-if [[ -n "$station_configs" ]]
-then
-    echo "Processing L3..."
-    parallel --bar "getL3 -v ../../../pypromice/src/pypromice/variables.csv -m ../../../pypromice/src/pypromice/metadata.csv -c ./{} -i ../ -o ../../../aws-l3/raw" ::: $(ls $station_configs) 
-
-else 
-    echo "No new raw updates found"
-fi
-
-echo "Finished AWS L0 raw >> L3 processing"
-
-#--------------------
-
-echo "Running AWS TX >> L0 >> L3 processing"
-
-echo "Fetching new L0 TX messages..."
-cd /mnt/data/USR/pypromice_aws/aws-l0
-getL0tx -a ../credentials/accounts.ini -p ../credentials/credentials.ini -c tx/config -f ../pypromice/src/pypromice/payload_formats.csv -t ../pypromice/src/pypromice/payload_types.csv -u ../credentials/last_aws_uid.ini -o tx
-
-echo "Finding recently fetched files..."
-cd /mnt/data/pypromice_aws/aws-l0/tx
-IMEIs=$(find . -maxdepth 1 -type f -mmin -60 | cut -d"/" -f2)
-imei_list=""
-for i in $(echo $IMEIs | tr ' ' '\n'); do
-  imei_list=$(echo $imei_list; grep -l $i config/*.toml)	
-done
-echo ${imei_list}   
-
-if [[ -n "$imei_list" ]]
-then
-    echo "Processing L3..."
-    parallel --bar "getL3 -v ../../pypromice/src/pypromice/variables.csv -m ../../pypromice/src/pypromice/metadata.csv -c ./{} -i . -o ../../aws-l3/tx" ::: $(ls $imei_list)
-
-else 
-    echo "No new TX updates found"
-fi
-
-echo "Finished AWS L0 raw >> L3 processing"
-
-#-------------
-
-echo "Running AWS L3 RAW and TX joiner"
-cd /mnt/data/pypromice_aws/aws-l3
-
-echo "Finding all unique AWS data by name..."
-names=$(find . -maxdepth 3 -type f -name "*.csv" | cut -d"/" -f3 | sort | uniq)
-echo $names
-
-echo "Joining L3 data..."
-parallel --bar --xapply ' ' "joinL3 -s ./raw/{}/{}_10min.csv -t ./tx/{}/{}_hour.csv -o level_3 -v ../pypromice/src/pypromice/variables.csv -m ../pypromice/src/pypromice/metadata.csv -d raw" ::: $names
-
-#--------------
-
-echo "Pushing new L0 data to aws-l0..."
-cd /mnt/data/pypromice_aws/aws-l0
-git add *
-git commit -m "L0 update `/bin/date +%Y-%m-%d\ %T`"
-git push
-
-echo "Pushing new L3 products to aws-l3..."
-cd /mnt/data/pypromice_aws/aws-l3
-git add *
-git commit -m "L3 update `/bin/date +%Y-%m-%d\ %T`"
-git push
-
-echo "Finished at `/bin/date +%Y-%m-%d\ %T`"
-```
+In our department, `l3_processor.sh` is set to run once an hour. This can be viewed on the [aws-l3 Gitlab README](https://geusgitlab.geus.dk/glaciology-and-climate/promice/aws-l3/-/blob/main/README.md). If you intend to set-up your own operational processing then just make sure to update the directories (signified by the `USR` string).
