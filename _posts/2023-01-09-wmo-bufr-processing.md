@@ -11,7 +11,7 @@ tags:
   - wmo
 ---
 
-The following is a general background and guide to the processing of BUFR files for submission of PROMICE and GC-Net data to the [World Meteorological Organization](https://public.wmo.int/en) (WMO), via ftp upload to the [Danish Meteorological Institute](https://www.dmi.dk/) (DMI).
+The following is a background and guide to the processing of BUFR files for submission of PROMICE and GC-Net data to the [World Meteorological Organization](https://public.wmo.int/en) (WMO), via ftp upload to the [Danish Meteorological Institute](https://www.dmi.dk/) (DMI).
 
 ## Project background and motivation
 
@@ -19,7 +19,9 @@ The submission of near-real-time (NRT) data from PROMICE and GC-Net to the WMO h
 
 Primary developers at GEUS are [Patrick Wright](https://github.com/patrickjwright) and [Penny How](https://github.com/PennyHow), in collaboration with Bjarne Amstrup and Erna Mourentza Beckmann at DMI. Project oversight by Robert Fausto and Andreas Ahlstrom at GEUS.
 
-Project timeline (to be updated as work progresses):
+### Timeline
+
+(to be updated as work progresses)
 
 - Fall 2021: Initial communications with DMI and stub out initial BUFR processing code. Penny How and Ken Mankoff determined that the PROMICE processing code first needed to be rewritten as a python3 package ([pypromice](https://github.com/GEUS-Glaciology-and-Climate/pypromice)) before continuing.
 - October - December 2022: BUFR processing code re-written to production state by Patrick Wright.
