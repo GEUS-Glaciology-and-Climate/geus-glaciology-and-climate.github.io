@@ -51,15 +51,11 @@ echo 'DONE WITH BUFR!'
 echo '======================================='
 ```
 
-`getBUFR` imports modules from `pypromice.postprocess.csv2bufr` and config objects from `pypromice.postprocess.wmo_config`, and completes the following:
+`getBUFR` imports functions from `pypromice.postprocess.csv2bufr` and config objects from `pypromice.postprocess.wmo_config`. The following is completed for each station:
 
-- Reads transmitted data files from `aws-l3/tx/*/*_hour.csv`
-- Uses the most recent single (and valid) observation from each station to create a BUFR file, written to `src/pypromice/postprocess/BUFR_out/`.
+- Read L3 transmitted data files from `aws-l3/tx/*/*_hour.csv`
+- Use the most recent valid observation set to create a BUFR file, written to `src/pypromice/postprocess/BUFR_out/`.
 - Included variables are instantaneous air temperature, relative humidity, pressure, wind speed and wind direction. In the future, we can consider including radiation variables and precipitation.
-
-`getBUFR` has several command-line args which can be configured in the `argparse` section at the top of the code (viewable with `getBUFR --help`).
-
-Running with the `--positions` flag (currently default in production) will write the most recent transmitted station positions to `aws-l3/AWS_station_locations.csv`. These positions are from a linear regression fit using the previous 3 months of transmitted data for each station. GPS-transmitted position data is used if available, otherwise modem-derived positions scraped from the email text are used (if modem-derived positions are used, no elevation is available). These are the same positions written to the BUFR files. The linear regression procedure uses `sklearn` and is completed in `csv2bufr.linear_fit`.
 
 ### bufr_wrapper.sh
 
@@ -70,13 +66,50 @@ After all stations are processed in `getBUFR`, we run `bufr_wrapper.sh` which co
 - Use in-line python to read `credentials/credential.ini` using `configparser`.
 - Use credentials to upload concatenated BUFR file to DMI ftp `upload` directory.
 
-Note that we are currently using plain ftp to complete this upload as specified by DMI. However, this is not a very secure method and we may want to consider asking DMI to switch to sftp or ssh methods in the future.
+Note that we are currently using simple ftp to complete this upload as specified by DMI. However, this is not a very secure method and we may want to consider asking DMI to switch to sftp or ssh methods in the future.
 
 ## Setup and usage
 
+### Optional args
+
+`getBUFR` has optional command-line args which can be configured in `parse_arguments()` (see `getBUFR --help`):
+
+```
+  --dev                 If included (True), run in dev mode. Useful for repeated runs of script between
+                        transmissions.
+  --positions           If included (True), make a positions dict and output AWS_station_locations.csv file.
+  --positions-filepath POSITIONS_FILEPATH
+                        Path to write AWS_station_locations.csv file.
+  --time-limit TIME_LIMIT
+                        Previous time to limit dataframe before applying linear regression.
+  --l3-filepath L3_FILEPATH
+                        Path to l3 tx .csv files.
+  --bufr-out BUFR_OUT   Path to the BUFR out directory.
+  --timestamps-pickle-filepath TIMESTAMPS_PICKLE_FILEPATH
+                        Path to the latest_timestamps.pickle file.
+```
+
+#### --dev
+
+You can run `getBUFR` with the `--dev` flag to over-ride the timestamp restrictions. This is useful for running `getBUFR` repeatedly for development, where you want to have station observations run through the full BUFR processing each time. In this case, the timestamp checking logic is modified as:
+
+```
+        if args.dev is True:
+          # If we want to run repeatedly (before another transmission comes in), then don't
+          # check the actual latest timestamp, and just set to two_days_ago
+          latest_timestamp = two_days_ago
+
+        if (current_timestamp > latest_timestamp) and (current_timestamp > two_days_ago):
+```
+As long as you have transmissions within the last two days, using the `--dev` flag will force all stations through the full BUFR processing.
+
+#### --positions
+
+Running with the `--positions` flag (currently default in production) will write the most recent transmitted station positions to `aws-l3/AWS_station_locations.csv`. These positions are from a linear regression fit using the previous 3 months of transmitted data for each station. GPS-transmitted position data is used if available, otherwise modem-derived positions scraped from the email text are used (if modem-derived positions are used, no elevation is available). These are the same positions written to the BUFR files. The linear regression procedure uses `sklearn` and is completed in `csv2bufr.linear_fit`.
+
 ### wmo_config.py
 
-In addition to the `argparse` args in `getBUFR`, the WMO BUFR processing is intended to be controlled by editing `wmo_config.py`.
+In addition to the optional args in `getBUFR`, the WMO BUFR processing is intended to be controlled by editing `wmo_config.py`.
 
 `stid_to_skip` and `vars_to_skip` are used to define stations and variables to be skipped in the BUFR processing. See the comments in these sections for further instructions. **It will be important to maintain this section and review for changes monthly or bimonthly!** As stations are discontinued, suspect/bad data is corrected, and v3 stations rotate into the mix, we will need to update these dicts.
 
@@ -104,20 +137,6 @@ The pickle file approach uses the following logic:
 - After processing, the `current_timestamps` dict is written back to the pickle file on disk, and will then be loaded into the `latest_timestamps` dict for the next run.
 
 There is no need to manually create this file. If missing it is automatically created, and it is over-written with each processing run. If you are running `getBUFR` for the first time (e.g. after setting up a fresh processing environment), the first run will not see the pickle file and will therefore create the file with the most recent timestamps (and no BUFR files are created). If subsequent runs are made before further transmissions are received, `getBUFR` will see that the times in the pickle file are the exact same as the time in the observations to be processed, so no BUFR processing will be completed. In this case, the BUFR processing will not proceed until new transmissions are received (usually the second hourly processing run).
-
-### usage of --dev flag
-
-You can run `getBUFR` with the `--dev` flag to over-ride the timestamp restrictions. This is useful for running `getBUFR` repeatedly for development, where you want to have station observations run through the full BUFR processing each time. In this case, the timestamp checking logic is modified as:
-
-```
-        if args.dev is True:
-          # If we want to run repeatedly (before another transmission comes in), then don't
-          # check the actual latest timestamp, and just set to two_days_ago
-          latest_timestamp = two_days_ago
-
-        if (current_timestamp > latest_timestamp) and (current_timestamp > two_days_ago):
-```
-As long as you have transmissions within the last two days, using the `--dev` flag will force all stations through the full BUFR processing.
 
 ## Data latency
 
