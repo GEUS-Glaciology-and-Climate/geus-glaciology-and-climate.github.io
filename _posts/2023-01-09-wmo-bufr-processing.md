@@ -93,7 +93,7 @@ Note that we are currently using simple ftp to complete this upload as specified
 
 #### --dev
 
-You can run `getBUFR` with the `--dev` flag to over-ride the timestamp checks (detailed below in [latest_timestamps.pickle](#latest_timestamps.pickle). This is useful for running `getBUFR` repeatedly for development, where you want to have station observations run through the full BUFR processing each time. In this case, the timestamp checking logic is modified as:
+You can run `getBUFR` with the `--dev` flag to over-ride the timestamp checks (detailed below in [latest_timestamps.pickle](#latest_timestampspickle)). This is useful for running `getBUFR` repeatedly for development, where you want to have station observations run through the full BUFR processing each time. In this case, the timestamp checking logic is modified as:
 
 ```
         if args.dev is True:
