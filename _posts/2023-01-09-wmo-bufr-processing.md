@@ -93,7 +93,7 @@ Note that we are currently using simple ftp to complete this upload as specified
 
 #### --dev
 
-You can run `getBUFR` with the `--dev` flag to over-ride the timestamp restrictions. This is useful for running `getBUFR` repeatedly for development, where you want to have station observations run through the full BUFR processing each time. In this case, the timestamp checking logic is modified as:
+You can run `getBUFR` with the `--dev` flag to over-ride the timestamp checks (detailed below in [latest_timestamps.pickle](#latest_timestamps.pickle). This is useful for running `getBUFR` repeatedly for development, where you want to have station observations run through the full BUFR processing each time. In this case, the timestamp checking logic is modified as:
 
 ```
         if args.dev is True:
@@ -102,6 +102,7 @@ You can run `getBUFR` with the `--dev` flag to over-ride the timestamp restricti
           latest_timestamp = two_days_ago
 
         if (current_timestamp > latest_timestamp) and (current_timestamp > two_days_ago):
+          # Proceed with processing...
 ```
 As long as you have transmissions within the last two days, using the `--dev` flag will force all stations through the full BUFR processing.
 
@@ -123,12 +124,12 @@ Outside of `wmo_config.py`, note that there is also some station-specific code i
 
 ### latest_timestamps.pickle
 
-We use a `latest_timestamps.pickle` file to keep track of the most recent timestamp for each station, and to ensure that submitted observations are:
+We use the `latest_timestamps.pickle` file to keep track of the most recent timestamp for each station. This allows us to check that submitted observations are:
 
 - The most recent, unique observation set from each station (not previously submitted)
-- No older than two days
+- No older than two days (Bjarne at DMI states that obs older than two days are not useful)
 
- [Pickle files](https://docs.python.org/3/library/pickle.html) are serialized python objects used for fast read/write times and compressed file size. I use this approach out of good practice and general habit, though this is a very small file that could easily have just been `.csv` or another plain-text format. The pickle file is created from the `current_timestamps` dictionary.
+[Pickle files](https://docs.python.org/3/library/pickle.html) are serialized python objects used for fast read/write times and compressed file size. I use this approach out of good practice and general habit, though this is a very small file that could easily have been `.csv` or another plain-text format. The pickle file is created from the `current_timestamps` dictionary, which has a simple format using stations IDs as keys (e.g. `NUK_L`), and timestamps as values.
 
 The pickle file approach uses the following logic:
 
