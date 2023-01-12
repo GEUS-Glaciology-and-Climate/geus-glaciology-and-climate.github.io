@@ -140,6 +140,48 @@ The pickle file approach uses the following logic:
 
 There is no need to manually create this file. If missing it is automatically created, and it is over-written with each processing run. If you are running `getBUFR` for the first time (e.g. after setting up a fresh processing environment), the first run will not see the pickle file and will therefore create the file with the most recent timestamps (and no BUFR files are created). If subsequent runs are made before further transmissions are received, `getBUFR` will see that the times in the pickle file are the exact same as the time in the observations to be processed, so no BUFR processing will be completed. In this case, the BUFR processing will not proceed until new transmissions are received (usually the second hourly processing run).
 
+### Terminal output
+
+Running `getBUFR` (independently or as part of `l3_processor.sh`) will produce useful print statements to the terminal. These are also viewable in `stdout` in the top level of the processing directory after each run.
+
+Each processed station will show the status of the BUFR file generation. A successful export looks like:
+
+```
+####### Processing THU_L #######
+Generating THU_L.bufr from ../aws-l3/tx/THU_L/THU_L_hour.csv
+TIMESTAMP: 2023-01-12 00:00:00
+Time checks passed.
+Successfully exported bufr file to src/pypromice/postprocess/BUFR_out/THU_L.bufr
+```
+
+An unsuccessful export will look like:
+
+```
+####### Processing SCO_L #######
+Generating SCO_L.bufr from ../aws-l3/tx/SCO_L/SCO_L_hour.csv
+TIMESTAMP: 2023-01-12 00:00:00
+Time checks passed.
+----> No gps_alt data for SCO_L!
+----> Failed min_data_check for position!
+```
+
+At the end of the BUFR processing, there will be a summary of results such as:
+
+```
+--------------------------------
+BUFR exported for 26 of 55 fpaths.
+
+skipped: ['SWC', 'CEN1', 'XXX', 'QAS_U', 'ZAK_L', 'Roof_PROMICE', 'THU_U', 'JAR', 'KAN_B', 'NUK_U', 'KPC_Uv3', 'UWN', 'Roof_GEUS', 'QAS_Lv3', 'ZAK_U', 'KPC_L']
+no_recent_data: ['UPE_U', 'KPC_Lv3', 'ZAK_Uv3', 'NEM', 'NAE', 'CEN2', 'TUN', 'SDL', 'QAS_M']
+no_valid_data: []
+no_entry_latest_timestamps: []
+failed_min_data_wx: []
+failed_min_data_pos: ['KAN_M', 'SCO_U', 'TAS_A', 'SCO_L']
+--------------------------------
+```
+
+If any of the data rejection lists shown in the summary don't make sense, you will have to search them in the code and follow how they are populated.
+
 ## Data latency
 
 Reducing data latency can be very important in real-time applications, especially when related to high-impact weather events. As of January 2023, we have a latency of approximately 7 minutes. This is defining latency as the time elapsed between the time an observation is made on the icesheet, to the the time the concatenated BUFR file is uploaded to DMI.
