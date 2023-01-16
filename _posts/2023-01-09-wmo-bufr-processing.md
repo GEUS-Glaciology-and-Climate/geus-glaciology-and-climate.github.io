@@ -15,7 +15,7 @@ The following is a background and guide to the processing of BUFR files for subm
 
 ## Project background and motivation
 
-The submission of near-real-time (NRT) data from PROMICE and GC-Net to the WMO has been a long-standing goal at GEUS. The data is intended to help improve numerical weather prediction (NWP) models, and will establish a role for GEUS as a data provider for an operational product.
+The submission of near-real-time (NRT) data from PROMICE and GC-Net to the WMO has been a long-standing goal at GEUS. The data is intended to help improve numerical weather prediction (NWP) models, and is also used by DMI as input to the [Copernicus Arctic Regional Reanalysis](https://climate.copernicus.eu/copernicus-arctic-regional-reanalysis-service) (CARRA). Integration of this data into operational products will establish a role for GEUS as a critical data provider in an otherwise data-sparse region.
 
 Primary developers at GEUS are [Patrick Wright](https://github.com/patrickjwright) and [Penny How](https://github.com/PennyHow), in collaboration with Bjarne Amstrup and Erna Mourentza Beckmann at DMI. Project oversight by Robert Fausto and Andreas Ahlstrom at GEUS.
 
@@ -68,7 +68,7 @@ After all stations are processed in `getBUFR`, we run `bufr_wrapper.sh` which co
 - Use in-line python to read `credentials/credential.ini` using `configparser`.
 - Use credentials to upload concatenated BUFR file to DMI ftp `upload` directory.
 
-Note that we are currently using simple ftp to complete this upload as specified by DMI. However, this is not a very secure method and we may want to consider asking DMI to switch to sftp or ssh methods in the future.
+Note that we are currently using simple ftp to complete this upload (as specified by DMI). However, this is not a very secure method and we may want to consider asking DMI to switch to sftp or ssh methods in the future.
 
 ## Setup and usage
 
