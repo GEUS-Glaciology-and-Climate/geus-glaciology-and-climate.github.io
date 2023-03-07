@@ -22,36 +22,24 @@ This web server is intended to provide metadata and data access for near-real-ti
 
 The GEUS TDS was set up following the [TDS Online Tutorial](https://docs.unidata.ucar.edu/tds/current/userguide/index.html). This tutorial was closely followed for almost every setup step, so if in doubt refer to this resource!
 
-The TDS was built in Feb 2023 by [Patrick Wright](https://github.com/patrickjwright) with assistance on setting up DNS and an Apache reverse proxy provided by [Jakob Molander](https://github.com/jakobmolandergeus). [Robert Fausto](https://github.com/robertfausto) provides general project oversight.
+The TDS was built in Feb 2023 by [Patrick Wright](https://github.com/patrickjwright) with assistance on setting up DNS and the Apache reverse proxy provided by [Jakob Molander](https://github.com/jakobmolandergeus). General project oversight provided by [Robert Fausto](https://github.com/robertfausto).
 
 The Unidata THREDDS support is active and very helpful! Contact via email at:
 
 support-thredds@unidata.ucar.edu
 
-
-## Technical stack
-
-The diagram below shows the Azure virtual machine (VM) hosting the THREDDS data server, along with the data replication pathway used with the Azure fileshare (current as of March, 2023).
-
-![tech_stack](https://raw.githubusercontent.com/GEUS-Glaciology-and-Climate/geus-glaciology-and-climate.github.io/master/assets/images/AWS_server_resources.png)
-
 ## Resource locations on the Azure Thredds VM
 
-Azure fileshare mount: `/data/geusgk/awsl3-fileshare`
-
-TDS content (data and config files): `/data/content/thredds`
-
-git repo for TDS files: `/data/thredds-git` ([https://github.com/GEUS-Glaciology-and-Climate/thredds-git](https://github.com/GEUS-Glaciology-and-Climate/thredds-git))
-
-Tomcat web server: `/opt/tomcat`
-
-Apache web server: `/etc/apache2`
-
-Java install: `/usr/lib/jvm/java-1.11.0-openjdk-amd64`
+- Azure fileshare mount: `/data/geusgk/awsl3-fileshare`
+- TDS content (data and config files): `/data/content/thredds`
+- [thredds-git](https://github.com/GEUS-Glaciology-and-Climate/thredds-git) repo for TDS files: `/data/thredds-git`
+- Tomcat web server: `/opt/tomcat`
+- Apache web server: `/etc/apache2`
+- Java install: `/usr/lib/jvm/java-1.11.0-openjdk-amd64`
 
 ## Adding new data
 
-To add any new dataset, you will need ssh access to the Azure Thredds VM instance. Contact Penny How for obtaining an ssh key. Any user with the ssh key can access the server through the open port 22. This allows access from home, from Greenland, etc. Please treat these ssh keys carefully, and only share via secure methods (internal geus email addresses, over Slack, etc). The current key is `aws-dec2022.pem` and should occasionally be rotated by creating a new key on the Azure portal.
+To add any new dataset, you will need ssh access to the Azure Thredds VM instance. Contact [Penny How](https://github.com/PennyHow) for obtaining an ssh key. Any user with the ssh key can access the server through the open port 22. This allows access from home, from Greenland, etc. Please treat these ssh keys carefully, and only share via secure methods (internal geus email addresses, over Slack, etc). The current key is `aws-dec2022.pem` and should occasionally be rotated by creating a new key on the Azure portal.
 
 Many resources on the TDS are only allowed for the `tomcat` or `root` user, but you will be logging in as the `aws` user. For many tasks, you will need to switch to the `root` user (`sudo su`).
 
@@ -61,7 +49,7 @@ GEUS G&K has an Azure storage account (`geusgk`), with an [Azure fileshare](http
 
 The fileshare is mounted on the Azure Thredds VM at `/data/geusgk/awsl3-fileshare`. The fileshare is also mounted on the Azure AWS VM at the same location, and on the "glacio01" server at `/media/aws/geusgk/awsl3-fileshare`. The capacity of the fileshare is 5 TB. If you need to mount the fileshare to an additional location, see the [Azure file share mounting documentation](https://learn.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-linux?tabs=smb311).
 
-Any data written to a mounted instance of the fileshare is almost instantly replicated both to the cloud (the `geusgk` storage account), and to any other mounted instance. To add new data, you first need to figure out how to write the data to the fileshare. For example, you could set up a process on glacio01 to download an archival (static) dataset from another web location, and then write the data to the mounted fileshare (perhaps using parallel methods in a `screen` session for large datasets).
+Any data written to a mounted instance of the fileshare is almost instantly replicated both to the cloud (the Azure `geusgk` storage account), and to any other mounted instance. To add new data, you first need to figure out how to write the data to the fileshare. For example, you could set up a process on glacio01 to download an archival (static) dataset from another web location, and then write the data to the mounted fileshare (perhaps using parallel methods in a `screen` session for large datasets).
 
 **NOTE:** For both the Azure aws processing server and the thredds server, pajwr mounted the fileshare using the "on-demand" instructions (see mounting documentation link above). If the server is shutdown and rebooted, this mount probably will not remain. In which case, it might be better to follow the instructions for "Automatically mount file shares" (i.e. register the mount in `fstab`).
 
@@ -88,7 +76,7 @@ You will also need to make a reference to the new catalog file at the bottom of 
   <catalogRef xlink:title="CryoClim" xlink:href="cryoclimCatalog.xml" name=""/>
 ```
 
-Getting the data links to display as intended can be difficult (good luck!), but you can start by following existing patterns in the other catalog files. The `datasetScan` and `filter` elements are very handy for scanning all files within a directory. Refer to the [TDS tutorial](https://docs.unidata.ucar.edu/tds/current/userguide/index.html) for further information.
+Getting the data links to display as intended can be difficult (good luck!), but you can **start by following existing patterns in the other catalog files**. The `datasetScan` and `filter` elements are very handy for scanning all files within a directory. Refer to the [TDS tutorial](https://docs.unidata.ucar.edu/tds/current/userguide/index.html) for further information.
 
 The approach I used which replicates `metadata` elements within each `dataset` element seems redundant, but I couldn't get it to work any other way.
 
@@ -111,28 +99,28 @@ There is a built-in method to insert custom user-defined text into the TDS pages
 
 `/opt/tomcat/webapps/thredds/WEB-INF/templates/commonFragments.html`
 
-The text is also backed up in the `thredds-git` repo at ([terms-of-service-text.html](https://github.com/GEUS-Glaciology-and-Climate/thredds-git/blob/main/terms-of-service-text.html)). If the Tomcat and/or TDS software is ever upgraded, this edit to the template file will likely be lost! But it will be easy to add back using the git backup.
+The text is also backed up in the `thredds-git` repo in [terms-of-service-text.html](https://github.com/GEUS-Glaciology-and-Climate/thredds-git/blob/main/terms-of-service-text.html). If the Tomcat and/or TDS software is ever upgraded, this edit to the template file will likely be lost! But it will be easy to add back using the git backup.
 
 ## Accessing data at the THREDDS server
 
-Both csv and NetCDF files can be accessed as a simple "click and download" via the "HTTP" file download method.
+Both csv and NetCDF files can be accessed as a simple "click and download" via the HTTP file download method.
 
 NetCDF can also be accessed using OPeNDAP and other data access methods listed for individual files. Following are some examples worth exploring further:
 
-[Deltares, Reading data from OpenDAP using python](https://publicwiki.deltares.nl/display/OET/Reading+data+from+OpenDAP+using+python)
-[Ocean Observatories Initiative, THREDDS example python script](https://oceanobservatories.org/thredds-quick-start/#python)
-[Exploring the THREDDS catalog with Unidata's Siphon](https://ioos.github.io/ioos_code_lab/content/code_gallery/data_access_notebooks/2017-01-18-siphon-explore-thredds.html)
+- [Deltares, Reading data from OpenDAP using python](https://publicwiki.deltares.nl/display/OET/Reading+data+from+OpenDAP+using+python)
+- [Ocean Observatories Initiative, THREDDS example python script](https://oceanobservatories.org/thredds-quick-start/#python)
+- [Exploring the THREDDS catalog with Unidata's Siphon](https://ioos.github.io/ioos_code_lab/content/code_gallery/data_access_notebooks/2017-01-18-siphon-explore-thredds.html)
 
 ## DNS and Apache reverse proxy
 
 Jakob Molander at GEUS set up the DNS entry allowing thredds.geus.dk to point at the public IP of the Azure VM running the TDS. 
 
-Jakob also set up the Apache reverse proxy. This allows incoming requests to first hit the Apache server, which are then securely routed to the TDS Tomcat server. This allows for the following URLS to all redirect to the same location:
+Jakob also set up the Apache reverse proxy. This allows incoming requests to first hit the Apache server, which are then securely routed to the TDS Tomcat server. This allows for the following URLs to all redirect to the same location:
 
-http://thredds.geus.dk
-https://thredds.geus.dk
-http://thredds.geus.dk/thredds
-https://thredds.geus.dk/thredds
+- [http://thredds.geus.dk](http://thredds.geus.dk)
+- [https://thredds.geus.dk](https://thredds.geus.dk)
+- [http://thredds.geus.dk/thredds](http://thredds.geus.dk/thredds)
+- [https://thredds.geus.dk/thredds](https://thredds.geus.dk/thredds)
 
 I did go through all steps in [Running The TDS Behind a Proxy Server](https://docs.unidata.ucar.edu/tds/current/userguide/tds_behind_proxy.html), including installation of Apache2 and installing security certificates from letsencrypt (using certbot), but ultimately I had to bring in Jakob to get this done correctly!
 
@@ -142,7 +130,7 @@ For any questions regarding DNS, Apache or security certificates, contact Jakob 
 
 [Matomo](https://matomo.org/) is used in place of Google Analytics for tracking usage of the TDS. This is an open-source tool that is internally hosted at GEUS. There is a 500 GB data disk mounted at `/db` that hosts the Matomo MySQL database. Access Matomo at the following URL:
 
-https://thredds.geus.dk/matomo/
+[https://thredds.geus.dk/matomo/](https://thredds.geus.dk/matomo/)
 
 user: `admin`, password is the same all-powerful aws user password as used elsewhere.
 
@@ -151,8 +139,8 @@ user: `admin`, password is the same all-powerful aws user password as used elsew
 
 These pages provide access to tweak config settings and do all sort of other amazing things I have not yet explored! The endpoints are located here:
 
-[https://thredds.geus.dk:8443/admin/](https://thredds.geus.dk:8443/admin/)
-[https://thredds.geus.dk:8443/manager/](https://thredds.geus.dk:8443/manager/)
+- [https://thredds.geus.dk:8443/admin/](https://thredds.geus.dk:8443/admin/)
+- [https://thredds.geus.dk:8443/manager/](https://thredds.geus.dk:8443/manager/)
 
 user: `admin`, password is the same all-powerful aws user password as used elsewhere.
 
