@@ -1,7 +1,7 @@
 ---
 title: "THREDDS Data Server"
 author: Patrick Wright
-date: 2023-03-07 00:00
+date: 2023-03-06 00:00
 classes: wide
 categories:
   - Guides
@@ -59,7 +59,9 @@ Any data written to a mounted instance of the fileshare is almost instantly repl
 
 Once a new dataset is written to the fileshare, you need to create symlinks to the data so it is visible in the TDS `public` content directory. You can symlink individual files (e.g. `AWS_station_locations.csv`) or directories (e.g. `aws-l3`). For example, a symlink was created for the `aws-l3` directory with:
 
-`$ ln -s /data/geusgk/awsl3-fileshare/aws-l3 /data/content/thredds/public/aws-l3`
+```
+$ ln -s /data/geusgk/awsl3-fileshare/aws-l3 /data/content/thredds/public/aws-l3
+```
 
 ### Modify catalog xml files
 
