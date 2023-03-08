@@ -51,9 +51,31 @@ The fileshare is mounted on the Azure Thredds VM at `/data/geusgk/awsl3-fileshar
 
 Any data written to a mounted instance of the fileshare is almost instantly replicated both to the cloud (the Azure `geusgk` storage account), and to any other mounted instance. To add new data, you first need to figure out how to write the data to the fileshare. For example, you could set up a process on glacio01 to download an archival (static) dataset from another web location, and then write the data to the mounted fileshare (perhaps using parallel methods in a `screen` session for large datasets).
 
-**NOTE:** For both the Azure aws processing server and the thredds server, pajwr mounted the fileshare using the "on-demand" instructions (see mounting documentation link above). If the server is shutdown and rebooted, this mount probably will not remain. In which case, it might be better to follow the instructions for "Automatically mount file shares" (i.e. register the mount in `fstab`).
+**NOTE:** For both the Azure aws processing server and the thredds server, pajwr mounted the fileshare using the "on-demand" instructions (see mounting documentation link above). If the server is shutdown and rebooted, this mount probably will not remain. In which case, it might be better to follow the instructions to "Automatically mount file shares" (i.e. register the mount in `fstab`).
 
-**NOTE:** The Azure Command Line Interface (CLI) is installed on both Azure VMs. The Azure Powershell interface is also installed on the thredds VM.
+**NOTE:** The Azure Command Line Interface (CLI) is installed on both Azure VMs (for any command starting with `az`). The Azure Powershell interface is also installed on the thredds VM.
+
+**NOTE:** If you want to mount the Azure fileshare at another location, the commands in the mounting documentation (linked above) assume you have logged in with `az login` (on glacio01, had to do `az login --use-device-code`). This will take you through the Azure login and auth procedure via a URL and code provided on the command line. You then have to select an account and
+authenticate using Microsoft Authenticator. Successful login should display something like:
+
+```
+[
+  {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "3a854c6f-9945-45ae-8f72-9f3efcf015ed",
+    "id": "0aead173-793e-4b77-8c6a-e0734a2f61a4",
+    "isDefault": true,
+    "managedByTenants": [],
+    "name": "FPJ kreditkort - Betalt efter forbrug",
+    "state": "Enabled",
+    "tenantId": "3a854c6f-9945-45ae-8f72-9f3efcf015ed",
+    "user": {
+      "name": "pajwr@geus.dk",
+      "type": "user"
+    }
+  }
+]
+```
 
 ### Make symlinks to the dataset
 
@@ -124,9 +146,11 @@ Jakob also set up the Apache reverse proxy. This allows incoming requests to fir
 - [http://thredds.geus.dk/thredds](http://thredds.geus.dk/thredds)
 - [https://thredds.geus.dk/thredds](https://thredds.geus.dk/thredds)
 
-I did go through all steps in [Running The TDS Behind a Proxy Server](https://docs.unidata.ucar.edu/tds/current/userguide/tds_behind_proxy.html), including installation of Apache2 and installing security certificates from letsencrypt (using certbot), but ultimately I had to bring in Jakob to get this done correctly!
+I did go through all steps in [Running The TDS Behind a Proxy Server](https://docs.unidata.ucar.edu/tds/current/userguide/tds_behind_proxy.html) including installation of Apache2 (`apt install apache2`) and installing security certificates from letsencrypt (following [this guide](https://medium.com/@mashrur123/a-step-by-step-guide-to-securing-a-tomcat-server-with-letsencrypt-ssl-certificate-65cd26290b70)), but ultimately I had to bring in Jakob to get this done correctly!
 
 For any questions regarding DNS, Apache or security certificates, contact Jakob Molander (jm@geus.dk).
+
+**NOTE:** See [Restrict Access to the TDS](https://docs.unidata.ucar.edu/tds/current/userguide/restict_access_to_tds.html) in the TDS tutorial if you need to restrict IPs, or restrict access to certain datasets. IP restriction could probably also be done at the "front door" with the Apache reverse proxy.
 
 ## Matomo
 
@@ -152,7 +176,7 @@ It will be wise to keep the software updated over time, in particular the THREDD
 
 - TDS Version 5.4
 - Tomcat 8.5.85
-- Java OpenJDK 11 (LTS)
+- Java 11 (installed with `sudo apt-get install openjdk-11-jdk`)
 
 If there is a new major version for TDS, this should be adopted. Check the TDS tutorial and upgrade to the recommended Tomcat and Java versions when appropriate.
 
