@@ -131,6 +131,7 @@ Both csv and NetCDF files can be accessed as a simple "click and download" via t
 
 NetCDF can also be accessed using OPeNDAP and other data access methods listed for individual files. Following are some examples worth exploring further:
 
+- [xarray OPeNDAP documentation](https://xarray-test.readthedocs.io/en/latest/io.html#opendap)
 - [Deltares, Reading data from OpenDAP using python](https://publicwiki.deltares.nl/display/OET/Reading+data+from+OpenDAP+using+python)
 - [Ocean Observatories Initiative, THREDDS example python script](https://oceanobservatories.org/thredds-quick-start/#python)
 - [Exploring the THREDDS catalog with Unidata's Siphon](https://ioos.github.io/ioos_code_lab/content/code_gallery/data_access_notebooks/2017-01-18-siphon-explore-thredds.html)
