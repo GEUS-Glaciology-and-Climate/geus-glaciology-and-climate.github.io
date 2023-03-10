@@ -43,7 +43,7 @@ To add any new dataset, you will need ssh access to the Azure Thredds VM instanc
 
 Many resources on the TDS are only allowed for the `tomcat` or `root` user, but you will be logging in as the `aws` user. For many tasks, you will need to switch to the `root` user (`sudo su`).
 
-### Migrate data to the Azure fileshare
+### 1. Migrate data to the Azure fileshare
 
 GEUS G&K has an Azure storage account (`geusgk`), with an [Azure fileshare](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-introduction) named `awsl3-fileshare`. If you have access, all Azure resources can be viewed at [https://portal.azure.com/](https://portal.azure.com/#home).
 
@@ -77,7 +77,7 @@ authenticate using Microsoft Authenticator. Successful login should display some
 ]
 ```
 
-### Make symlinks to the dataset
+### 2. Make symlinks to the dataset
 
 Once a new dataset is written to the fileshare, you need to create symlinks to the data so it is visible in the TDS `public` content directory. You can symlink individual files (e.g. `AWS_station_locations.csv`) or directories (e.g. `aws-l3`). For example, a symlink was created for the `aws-l3` directory with:
 
@@ -85,7 +85,7 @@ Once a new dataset is written to the fileshare, you need to create symlinks to t
 $ ln -s /data/geusgk/awsl3-fileshare/aws-l3 /data/content/thredds/public/aws-l3
 ```
 
-### Modify catalog xml files
+### 3. Modify catalog xml files
 
 Once the data is linked to `/data/content/thredds/public`, you need to modify the catalog xml files. These files should be created and/or modified in the `/data/thredds-git` repository. Symlinks for xml catalog and config files point from `/data/content/thredds` to the git repo versions. Commit, add and push any changes.
 
@@ -104,7 +104,7 @@ Getting the data links to display as intended can be difficult (good luck!), but
 
 The approach I used which replicates `metadata` elements within each `dataset` element seems redundant, but I couldn't get it to work any other way.
 
-### Restart the Tomcat server
+### 4. Restart the Tomcat server
 
 For any changes to take effect, you must execute the following:
 
@@ -124,17 +124,6 @@ There is a built-in method to insert custom user-defined text into the TDS pages
 `/opt/tomcat/webapps/thredds/WEB-INF/templates/commonFragments.html`
 
 The text is also backed up in the `thredds-git` repo in [terms-of-service-text.html](https://github.com/GEUS-Glaciology-and-Climate/thredds-git/blob/main/terms-of-service-text.html). If the Tomcat and/or TDS software is ever upgraded, this edit to the template file will likely be lost! But it will be easy to add back using the git backup.
-
-## Accessing data at the THREDDS server
-
-Both csv and NetCDF files can be accessed as a simple "click and download" via the HTTP file download method.
-
-NetCDF can also be accessed using OPeNDAP and other data access methods listed for individual files. Following are some examples worth exploring further:
-
-- [xarray OPeNDAP documentation](https://xarray-test.readthedocs.io/en/latest/io.html#opendap)
-- [Deltares, Reading data from OpenDAP using python](https://publicwiki.deltares.nl/display/OET/Reading+data+from+OpenDAP+using+python)
-- [Ocean Observatories Initiative, THREDDS example python script](https://oceanobservatories.org/thredds-quick-start/#python)
-- [Exploring the THREDDS catalog with Unidata's Siphon](https://ioos.github.io/ioos_code_lab/content/code_gallery/data_access_notebooks/2017-01-18-siphon-explore-thredds.html)
 
 ## DNS and Apache reverse proxy
 
