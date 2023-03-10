@@ -47,11 +47,11 @@ data.drop(['time'], axis=1, inplace=True) # drop original time column
 # =========================================================
 import pandas as pd
 
-data = {}
 # Read AWS_station_locations.csv to get station names
 url = "https://thredds.geus.dk/thredds/fileServer/metadata/AWS_station_locations.csv"
 locations = pd.read_csv(url)
 
+data = {}
 for stid in locations.stid: # this loop takes ~30 sec
   stn_url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
   df = pd.read_csv(stn_url)
