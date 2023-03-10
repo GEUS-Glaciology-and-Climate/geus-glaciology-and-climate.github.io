@@ -125,7 +125,7 @@ $ conda install -c conda-forge pydap
 
 Currently you must use a `conda` (or miniconda) env, since pyenv/virtualenv and `pip` only provides `Pydap==3.2.2` (tried with python 3.7, 3.8, 3.9). `conda` provides `Pydap==3.3.0`, which is required to use `xr.backends.PydapDataStore`. I am using a py38 conda environment.
 
-Errors encountered without using the `xr.backends.PydapDataStore` method:
+#### Errors encountered without using the `xr.backends.PydapDataStore` method
 
 Using `xr.open_dataset(url,engine='pydap')` results in:
 `UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 10711: ordinal not in range(128)`
