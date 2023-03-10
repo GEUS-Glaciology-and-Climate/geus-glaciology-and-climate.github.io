@@ -24,7 +24,7 @@ This guide should be updated with any additional data access methods that are us
 
 Using the graphic user interface (GUI) on the browser, you can navigate to individual files in the TDS directory. Both csv and [NetCDF](https://www.unidata.ucar.edu/software/netcdf/) files can be accessed as a simple "click and download" via the HTTP file download method.
 
-NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) and other data access methods listed for individual files (e.g. see [KAN_U](https://thredds.geus.dk/thredds/catalog/aws_l3_station_netcdf/level_3/KAN_U/catalog.html?dataset=aws_l3_station_netcdf/level_3/KAN_U/KAN_U_hour.nc). See the following link for a concise explanation of the available TDS data access services:
+NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) and other data access methods listed for individual files (e.g. see data access services listed for [KAN_U](https://thredds.geus.dk/thredds/catalog/aws_l3_station_netcdf/level_3/KAN_U/catalog.html?dataset=aws_l3_station_netcdf/level_3/KAN_U/KAN_U_hour.nc)). See the following link for a concise explanation of the available TDS data access services:
 
 [https://www.ncei.noaa.gov/access/thredds-user-guide](https://www.ncei.noaa.gov/access/thredds-user-guide)
 
@@ -40,6 +40,7 @@ import pandas as pd
 stid = 'NUK_Uv3'
 url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
 data = pd.read_csv(url)
+
 # Pandas dataframes are much more useful after setting the index to datetime:
 data.set_index(pd.to_datetime(data.time), inplace=True)
 data.drop(['time'], axis=1, inplace=True) # drop original time column
@@ -127,10 +128,10 @@ Currently you must use a `conda` (or miniconda) env, since pyenv/virtualenv and 
 
 Errors encountered without using the `xr.backends.PydapDataStore` method:
 
-using `xr.open_dataset(url,engine='pydap')` results in:
+Using `xr.open_dataset(url,engine='pydap')` results in:
 `UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 10711: ordinal not in range(128)`
 
-using `xr.open_dataset(url,engine='netcdf4')` results in:
+Using `xr.open_dataset(url,engine='netcdf4')` results in:
 `OSError: [Errno -68] NetCDF: I/O failure`
 
 Using `netCDF4.Dataset(url)` also results in the same `OSError`.
