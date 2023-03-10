@@ -54,9 +54,10 @@ locations = pd.read_csv(url)
 
 for stid in locations.stid: # this loop takes ~30 sec
   stn_url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
-  data[stid] = pd.read_csv(stn_url)
-  data.set_index(pd.to_datetime(data.time), inplace=True)
-  data.drop(['time'], axis=1, inplace=True) # drop original time column
+  df = pd.read_csv(stn_url)
+  df.set_index(pd.to_datetime(df.time), inplace=True)
+  df.drop(['time'], axis=1, inplace=True) # drop original time column
+  data[stid] = df
 ```
 
 ## Using python, NetCDF OPeNDAP
