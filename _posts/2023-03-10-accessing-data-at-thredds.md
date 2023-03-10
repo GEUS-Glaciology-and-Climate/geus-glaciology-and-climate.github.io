@@ -79,9 +79,10 @@ url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}
 data_store = xr.backends.PydapDataStore(open_url(url, user_charset='utf-8')) # needs PyDAP >= v3.3.0
 
 data = xr.open_dataset(data_store)
+```
 
-# data now looks like:
-'''
+`data` now looks like:
+```
 In [1]: data
 Out[1]: 
 <xarray.Dataset>
@@ -116,8 +117,8 @@ Attributes: (12/66)
     standard_name_vocabulary:        CF Standard Name Table (v77, 19 January ...
     summary:                         \"The Programme for Monitoring of the Gr...
     _NCProperties:                   version=2,netcdf=4.9.0,hdf5=1.12.2
-'''
 ```
+
 Make sure you use `conda` and install `pydap` with:
 
 ```
