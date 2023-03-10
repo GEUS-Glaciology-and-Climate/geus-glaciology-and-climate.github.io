@@ -50,7 +50,7 @@ data.drop(['time'], axis=1, inplace=True) # drop original time column
 import pandas as pd
 
 data = {}
-# Read AWS_station_location.csv to get station names
+# Read AWS_station_locations.csv to get station names
 url = "https://thredds.geus.dk/thredds/fileServer/metadata/AWS_station_locations.csv"
 locations = pd.read_csv(url)
 
