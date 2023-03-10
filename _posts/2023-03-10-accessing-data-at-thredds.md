@@ -12,7 +12,7 @@ tags:
   - cryoclim
 ---
 
-The GEUS THREDDS Data Server (TDS) is located here:
+The GEUS Glaciology and Climate THREDDS data server (TDS) is located here:
 
 [https://thredds.geus.dk](https://thredds.geus.dk)
 

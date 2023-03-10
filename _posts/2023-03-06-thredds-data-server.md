@@ -1,5 +1,5 @@
 ---
-title: "THREDDS Data Server"
+title: "THREDDS Data Server: background and guide"
 author: Patrick Wright
 date: 2023-03-06 00:00
 classes: wide
@@ -14,7 +14,7 @@ tags:
 
 ## THREDDS background
 
-The GEUS Glaciology and Climate THREDDS data server (TDS) is located at:
+The GEUS Glaciology and Climate THREDDS data server (TDS) is located here:
 
 [https://thredds.geus.dk](https://thredds.geus.dk)
 
