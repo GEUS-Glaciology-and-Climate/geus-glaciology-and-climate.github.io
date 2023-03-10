@@ -18,15 +18,13 @@ The GEUS THREDDS Data Server (TDS) is located here:
 
 This guide should be updated with any additional data access methods that are useful!
 
-## Data access methods
-
-### Browser GUI
+## Browser GUI
 
 Using the graphic user interface (GUI) on the browser, you can navigate to individual files in the TDS directory. Both csv and [NetCDF](https://www.unidata.ucar.edu/software/netcdf/) files can be accessed as a simple "click and download" via the HTTP file download method.
 
 NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) and other data access methods listed for individual files (e.g. see data access services listed for [KAN_U](https://thredds.geus.dk/thredds/catalog/aws_l3_station_netcdf/level_3/KAN_U/catalog.html?dataset=aws_l3_station_netcdf/level_3/KAN_U/KAN_U_hour.nc)). See [here](https://www.ncei.noaa.gov/access/thredds-user-guide) for a concise explanation of the available TDS data access services.
 
-### Using python, csv
+## Using python, csv
 
 The methods below have been tested with python >= 3.8. Required imports are listed with each method.
 
@@ -61,7 +59,7 @@ for stid in locations.stid: # this loop takes ~30 sec
   data.drop(['time'], axis=1, inplace=True) # drop original time column
 ```
 
-### Using python, NetCDF OPeNDAP
+## Using python, NetCDF OPeNDAP
 
 With initial testing, pajwr encountered errors with decoding NetCDF files served via OPeNDAP on THREDDS via standard methods using `xarray`, `netcdf4`, or `pydap` (see errors below). This issue is present with the GEUS OPeNDAP NetCDF URLs, as well as other THREDDS servers (such as [thredds.ucar.edu](https://thredds.ucar.edu/thredds/catalog/catalog.html)).
 
@@ -125,7 +123,7 @@ $ conda install -c conda-forge pydap
 
 Currently you must use a `conda` (or miniconda) env, since pyenv/virtualenv and `pip` only provides `Pydap==3.2.2` (tried with python 3.7, 3.8, 3.9). `conda` provides `Pydap==3.3.0`, which is required to use `xr.backends.PydapDataStore`. I am using a py38 conda environment.
 
-#### Errors encountered with other xarray and netCDF4 methods
+### Errors encountered with other xarray and netCDF4 methods
 
 Using `xr.open_dataset(url,engine='pydap')` results in:
 `UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 10711: ordinal not in range(128)`
@@ -135,13 +133,13 @@ Using `xr.open_dataset(url,engine='netcdf4')` results in:
 
 Using `netCDF4.Dataset(url)` also results in the same `OSError`.
 
-### Using python and Siphon
+## Using python and Siphon
 
 Totally untested, but this looks like it could be great to explore:
 
 [Exploring the THREDDS catalog with Unidata's Siphon](https://ioos.github.io/ioos_code_lab/content/code_gallery/data_access_notebooks/2017-01-18-siphon-explore-thredds.html)
 
-### Web resources
+## Web resources
 - [xarray OPeNDAP documentation](https://xarray-test.readthedocs.io/en/latest/io.html#opendap)
 - [Deltares, Reading data from OpenDAP using python](https://publicwiki.deltares.nl/display/OET/Reading+data+from+OpenDAP+using+python)
 - [Ocean Observatories Initiative, THREDDS example python script](https://oceanobservatories.org/thredds-quick-start/#python)
