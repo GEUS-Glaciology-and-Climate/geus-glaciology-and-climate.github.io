@@ -44,7 +44,7 @@ import pandas as pd
 
 stid = 'NUK_Uv3'
 
-# Use either the "_station" or "_time" directories:
+# Use either the "_time" or "_station" directories:
 url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_time_csv/level_3/hour/{}_hour.csv".format(stid)
 #url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
 
@@ -87,9 +87,10 @@ from pydap.client import open_url
 
 stid = 'NUK_Uv3'
 
-# Use either the "_station" or "_time" directories:
-url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_time_csv/level_3/hour/{}_hour.csv".format(stid)
-#url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
+# Use either the "_time" or "_station" directories.
+# These URLs are listed in the "Data URL" field if you click on the station's "OPENDAP" link.
+url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_time_netcdf/level_3/hour/{}_hour.nc".format(stid)
+#url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}_hour.nc".format(stid,stid)
 
 data_store = xr.backends.PydapDataStore(open_url(url, user_charset='utf-8'))
 
