@@ -43,10 +43,14 @@ Read single station (csv) with `pandas`:
 import pandas as pd
 
 stid = 'NUK_Uv3'
-url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
+
+# Use either the "_station" or "_time" directories:
+url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_time_csv/level_3/hour/{}_hour.csv".format(stid)
+#url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
+
 data = pd.read_csv(url)
 
-# Pandas dataframes are much more useful after setting the index to datetime:
+# set dataframe index to datetime:
 data.set_index(pd.to_datetime(data.time), inplace=True)
 data.drop(['time'], axis=1, inplace=True) # drop original time column
 ```
@@ -56,12 +60,12 @@ Read all stations (csv) with `pandas`, make dictionary of dataframes:
 import pandas as pd
 
 # Read AWS_station_locations.csv to get station names
-url = "https://thredds.geus.dk/thredds/fileServer/metadata/AWS_station_locations.csv"
-locations = pd.read_csv(url)
+url_locations = "https://thredds.geus.dk/thredds/fileServer/metadata/AWS_station_locations.csv"
+locations = pd.read_csv(url_locations)
 
 data = {}
 for stid in locations.stid: # this loop takes ~30 sec
-  stn_url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
+  stn_url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_time_csv/level_3/hour/{}_hour.csv".format(stid)
   df = pd.read_csv(stn_url)
   df.set_index(pd.to_datetime(df.time), inplace=True)
   df.drop(['time'], axis=1, inplace=True) # drop original time column
@@ -83,13 +87,11 @@ from pydap.client import open_url
 
 stid = 'NUK_Uv3'
 
-# Read from the "station" THREDDS directory
-url_station = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}_hour.nc".format(stid,stid)
+# Use either the "_station" or "_time" directories:
+url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_time_csv/level_3/hour/{}_hour.csv".format(stid)
+#url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
 
-# Read from the "time" THREDDS directory
-url_time = "https://thredds.geus.dk/thredds/dodsC/aws_l3_time_netcdf/level_3/hour/{}_hour.nc".format(stid)
-
-data_store = xr.backends.PydapDataStore(open_url(url_station, user_charset='utf-8'))
+data_store = xr.backends.PydapDataStore(open_url(url, user_charset='utf-8'))
 
 data = xr.open_dataset(data_store)
 ```
