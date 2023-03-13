@@ -31,7 +31,7 @@ Retreive single file with `wget`:
 wget 'https://thredds.geus.dk/thredds/fileServer/aws_l3_time_netcdf/level_3/hour/CEN1_hour.nc'
 ```
 
-Download an entire catalog with `wget`. In this case, everything in the `aws_l3_time_netcdf/level_3` directory (includes `day`, `hour` and `month` subdirectories). Note that we also have to exclude `-X` unwanted directories, such as `MODIS_*`:
+Download an entire catalog with `wget`. In this case, retreive everything in the `aws_l3_time_netcdf/level_3` directory (includes `day`, `hour` and `month` subdirectories). Note that we also have to exclude (`-X`) unwanted directories, such as `MODIS_*`:
 ```
 wget -e robots=off -nH --cut-dirs 4 -nc -r -l5 -A '*.nc' -R 'catalog*' -I /thredds/fileServer/,/thredds/catalog/ 'https://thredds.geus.dk/thredds/catalog/aws_l3_time_netcdf/level_3/catalog.html' -X thredds/catalog/MODIS_*
 ```
@@ -132,13 +132,13 @@ Attributes: (12/66)
     _NCProperties:                   version=2,netcdf=4.9.0,hdf5=1.12.2
 ```
 
-Use the `PydapDataStore` to takes time "slices":
+Use the `PydapDataStore` and `.sel` to takes time "slices":
 ```
 # Get all data for a specific day
-data = xr.open_dataset(data_store).sel(time='2023-03-12')
+data_day = xr.open_dataset(data_store).sel(time='2023-03-12')
 
 # Get all data for a specific year
-data = xr.open_dataset(data_store).sel(time='2023')
+data_year = xr.open_dataset(data_store).sel(time='2023')
 
 # Get only the latest single obset for this station
 # Both the source time and target time must have same tz awareness
