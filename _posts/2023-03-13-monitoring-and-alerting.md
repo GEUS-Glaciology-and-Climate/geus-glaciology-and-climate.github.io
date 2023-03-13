@@ -51,8 +51,6 @@ The best first-stop is to look at `process_stdout` and `process_stderr` at `/dat
 
 You can also verify that files are not updating (and see how long processing has been down) by looking at `tail` on either the `aws-l3/tx` or `aws-l3/level_3` files. Alternatively, you can grab a data csv file (or `AWS_station_locations.csv`) from the THREDDS server and check update times. You can also check out commits directly on the gitlab repos online.
 
-Most errors occur just after major code releases (if something was not caught by automated testing), or just after (for example) re-configuring processing workflow steps. If the processing has been running in a steady-state for many weeks or months, errors are very unlikely. This is good, and means we generally have stable processing code!
-
 A successful run with no alerts issued will appear in `~/aws-monitor-alert/aws_processing_monitor/stdout` as:
 
 ```
@@ -65,6 +63,10 @@ aws-l3/tx files are current. No alert issued.
 aws-l3/level_3 files are current. No alert issued.
 FINISHED
 ```
+
+### DMI BUFR backfilling
+
+If the DMI BUFR upload process has been down for an extended period, you should email Bjarne Amstrup at DMI (bja@dmi.dk) and let him know. We collect hourly backup concatenated BUFR files at `/data/pypromice_aws/pypromice/src/pypromice/postprocess/BUFR_backup` for the previous 48 hrs. These files should be manually backfilled into the DMI ftp `upload` directory for the missing time period. See `pypromice_aws/aws-operational-processing/bufr_wrapper.sh` for ftp methods. **TO DO:** pajwr will try to make a dedicated script to do this for a defined time range.
 
 ## Azure virtual machines (VMs)
 
