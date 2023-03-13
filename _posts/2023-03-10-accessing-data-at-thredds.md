@@ -26,12 +26,12 @@ NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) (which has
 
 ## Command-line
 
-Retreive single file with `wget`:
+Retrieve single file with `wget`:
 ```
 wget 'https://thredds.geus.dk/thredds/fileServer/aws_l3_time_netcdf/level_3/hour/CEN1_hour.nc'
 ```
 
-Download an entire catalog with `wget`. In this case, retreive everything in the `aws_l3_time_netcdf/level_3` directory (includes `day`, `hour` and `month` subdirectories). Note that we also have to exclude (`-X`) unwanted directories, such as `MODIS_*`:
+Download an entire catalog with `wget`. In this case, retrieve everything in the `aws_l3_time_netcdf/level_3` directory (includes `day`, `hour` and `month` subdirectories). Note that we also have to exclude (`-X`) unwanted directories, such as `MODIS_*`:
 ```
 wget -e robots=off -nH --cut-dirs 4 -nc -r -l5 -A '*.nc' -R 'catalog*' -I /thredds/fileServer/,/thredds/catalog/ 'https://thredds.geus.dk/thredds/catalog/aws_l3_time_netcdf/level_3/catalog.html' -X thredds/catalog/MODIS_*
 ```
@@ -72,10 +72,9 @@ for stid in locations.stid: # this loop takes ~30 sec
   data[stid] = df
 ```
 
-## Using python, xarray, OPeNDAP (NetCDF)
+## Using python, xarray, Pydap and OPeNDAP (NetCDF)
 
-The following solution uses [`xr.backends.PydapDataStore`](https://docs.xarray.dev/en/stable/generated/xarray.backends.PydapDataStore.html) following methods described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python#h_33df7ebcce). Make sure you use `conda` and install `pydap >= 3.3.0` with:
-
+The following solution uses [`xr.backends.PydapDataStore`](https://docs.xarray.dev/en/stable/generated/xarray.backends.PydapDataStore.html) following methods described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python). Using `conda`, install `pydap >= 3.3.0` with:
 ```
 $ conda install -c conda-forge pydap
 ```
@@ -88,7 +87,7 @@ from pydap.client import open_url
 stid = 'NUK_Uv3'
 
 # Use either the "_time" or "_station" directories.
-# These URLs are listed in the "Data URL" field if you click on the station's "OPENDAP" link.
+# These "/dodsC" URLs are listed in the "Data URL" field if you click on the station's "OPENDAP" link.
 url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_time_netcdf/level_3/hour/{}_hour.nc".format(stid)
 #url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}_hour.nc".format(stid,stid)
 
@@ -97,7 +96,7 @@ data_store = xr.backends.PydapDataStore(open_url(url, user_charset='utf-8'))
 data = xr.open_dataset(data_store)
 ```
 
-`data` now looks like:
+`data` is now an `xarray.Dataset`:
 ```
 In [1]: data
 Out[1]: 
@@ -135,7 +134,7 @@ Attributes: (12/66)
     _NCProperties:                   version=2,netcdf=4.9.0,hdf5=1.12.2
 ```
 
-Use the `PydapDataStore` and `.sel` to takes time "slices":
+Before reading the entire file to an in-memory object, use the `PydapDataStore` and `.sel` to takes time "slices":
 ```
 from datetime import datetime, timezone
 
@@ -156,7 +155,7 @@ data_latest = xr.open_dataset(data_store).sel(time=target_time, method='nearest'
 
 ### Environments and pydap versions
 
-Currently you must use a `conda` environment, as pyenv/virtualenv and `pip` only provides `pydap==3.2.2` (tried with python 3.7, 3.8, 3.9). `conda` provides `pydap==3.3.0`, which is required to use `xr.backends.PydapDataStore`. The above code runs in a py38 conda environment.
+Currently you must use a `conda` environment, as pyenv/virtualenv and `pip` only provides `pydap==3.2.2` (tried with python 3.7, 3.8, 3.9). `conda` (via `conda-forge`) provides `pydap==3.3.0`, which is required to use `xr.backends.PydapDataStore`. The above code runs in a py38 conda environment.
 
 ### Errors encountered with "standard" xarray and netCDF4 methods
 
@@ -172,11 +171,13 @@ Using `netCDF4.Dataset(url)` also results in the same `OSError`. This error is f
 
 ## Using python and Siphon
 
-Totally untested, but this looks like it could be great to explore:
+Totally untested, but this looks like it could be great to explore further:
 
 [Exploring the THREDDS catalog with Unidata's Siphon](https://ioos.github.io/ioos_code_lab/content/code_gallery/data_access_notebooks/2017-01-18-siphon-explore-thredds.html)
 
 ## Web resources
+- [OPeNDAP documention](https://opendap.github.io/documentation/UserGuideComprehensive.html)
 - [xarray OPeNDAP documentation](https://xarray-test.readthedocs.io/en/latest/io.html#opendap)
+- [Pydap documentation](https://www.pydap.org/en/latest/)
 - [Deltares, Reading data from OpenDAP using python](https://publicwiki.deltares.nl/display/OET/Reading+data+from+OpenDAP+using+python)
 - [Ocean Observatories Initiative, THREDDS example python script](https://oceanobservatories.org/thredds-quick-start/#python)
