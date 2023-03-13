@@ -134,6 +134,8 @@ Attributes: (12/66)
 
 Use the `PydapDataStore` and `.sel` to takes time "slices":
 ```
+from datetime import datetime, timezone
+
 # Get all data for a specific day
 data_day = xr.open_dataset(data_store).sel(time='2023-03-12')
 
