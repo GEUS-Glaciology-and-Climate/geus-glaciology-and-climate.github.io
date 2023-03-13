@@ -134,7 +134,7 @@ Attributes: (12/66)
     _NCProperties:                   version=2,netcdf=4.9.0,hdf5=1.12.2
 ```
 
-Before reading the entire file to an in-memory object, use the `PydapDataStore` and `.sel` to takes time "slices":
+Before reading the entire file to an in-memory object, use the `PydapDataStore` and `.sel` to take time "slices":
 ```
 from datetime import datetime, timezone
 
