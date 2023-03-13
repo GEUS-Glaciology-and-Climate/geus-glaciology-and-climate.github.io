@@ -22,7 +22,7 @@ This guide should be updated with any additional data access methods that are us
 
 Using the graphic user interface (GUI) on the browser, you can navigate to individual files in the TDS directory. Both csv and [NetCDF](https://www.unidata.ucar.edu/software/netcdf/) files can be accessed as a simple "click and download" via the HTTP file download method.
 
-NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) (which has it's own browser GUI page for each station) and other data access methods listed for individual files. For example, see the data access services listed for [KAN_U](https://thredds.geus.dk/thredds/catalog/aws_l3_station_netcdf/level_3/KAN_U/catalog.html?dataset=aws_l3_station_netcdf/level_3/KAN_U/KAN_U_hour.nc)). The services landing page is a good spot to scrape URLs for use in programmtic access methods. See [here](https://www.ncei.noaa.gov/access/thredds-user-guide) for a concise explanation of the available TDS data access services.
+NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) (which has it's own browser GUI page for each station) and other data access methods listed for individual files. For example, see the data access services listed for [KAN_U](https://thredds.geus.dk/thredds/catalog/aws_l3_station_netcdf/level_3/KAN_U/catalog.html?dataset=aws_l3_station_netcdf/level_3/KAN_U/KAN_U_hour.nc)). The services landing page is useful to scrape URLs for use in programmatic access methods. See [here](https://www.ncei.noaa.gov/access/thredds-user-guide) for a concise explanation of the available TDS data access services.
 
 ## Command-line
 
