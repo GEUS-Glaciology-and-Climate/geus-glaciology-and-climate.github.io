@@ -22,15 +22,24 @@ This guide should be updated with any additional data access methods that are us
 
 Using the graphic user interface (GUI) on the browser, you can navigate to individual files in the TDS directory. Both csv and [NetCDF](https://www.unidata.ucar.edu/software/netcdf/) files can be accessed as a simple "click and download" via the HTTP file download method.
 
-NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) and other data access methods listed for individual files (e.g. see data access services listed for [KAN_U](https://thredds.geus.dk/thredds/catalog/aws_l3_station_netcdf/level_3/KAN_U/catalog.html?dataset=aws_l3_station_netcdf/level_3/KAN_U/KAN_U_hour.nc)). See [here](https://www.ncei.noaa.gov/access/thredds-user-guide) for a concise explanation of the available TDS data access services.
+NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) (which has it's own browser GUI page for each station) and other data access methods listed for individual files. For example, see the data access services listed for [KAN_U](https://thredds.geus.dk/thredds/catalog/aws_l3_station_netcdf/level_3/KAN_U/catalog.html?dataset=aws_l3_station_netcdf/level_3/KAN_U/KAN_U_hour.nc)). The services landing page is a good spot to scrape URLs for use in programmtic access methods. See [here](https://www.ncei.noaa.gov/access/thredds-user-guide) for a concise explanation of the available TDS data access services.
 
-## Using python, csv
+## Command-line
 
-The methods below have been tested with python >= 3.8. Required imports are listed with each method.
-
+Retreive single file with `wget`:
 ```
-# Read single station, csv with pandas
-# ===================================
+wget 'https://thredds.geus.dk/thredds/fileServer/aws_l3_time_netcdf/level_3/hour/CEN1_hour.nc'
+```
+
+Download an entire catalog with `wget`. In this case, everything in the `aws_l3_time_netcdf/level_3` directory (includes `day`, `hour` and `month` subdirectories). Note that we also have to exclude `-X` unwanted directories, such as `MODIS_*`:
+```
+wget -e robots=off -nH --cut-dirs 4 -nc -r -l5 -A '*.nc' -R 'catalog*' -I /thredds/fileServer/,/thredds/catalog/ 'https://thredds.geus.dk/thredds/catalog/aws_l3_time_netcdf/level_3/catalog.html' -X thredds/catalog/MODIS_*
+```
+
+## Using python, pandas (csv)
+
+Read single station (csv) with `pandas`:
+```
 import pandas as pd
 
 stid = 'NUK_Uv3'
@@ -42,9 +51,8 @@ data.set_index(pd.to_datetime(data.time), inplace=True)
 data.drop(['time'], axis=1, inplace=True) # drop original time column
 ```
 
+Read all stations (csv) with `pandas`, make dictionary of dataframes:
 ```
-# Make dict of dataframes for all stations, csv with pandas
-# =========================================================
 import pandas as pd
 
 # Read AWS_station_locations.csv to get station names
@@ -60,20 +68,28 @@ for stid in locations.stid: # this loop takes ~30 sec
   data[stid] = df
 ```
 
-## Using python, NetCDF OPeNDAP
+## Using python, xarray, OPeNDAP (NetCDF)
 
-With initial testing, pajwr encountered errors with decoding NetCDF files served via OPeNDAP on THREDDS via standard methods using `xarray`, `netcdf4`, or `pydap` (see errors below). This issue is present with the GEUS OPeNDAP NetCDF URLs, as well as other THREDDS servers (such as [thredds.ucar.edu](https://thredds.ucar.edu/thredds/catalog/catalog.html)).
+The following solution uses [`xr.backends.PydapDataStore`](https://docs.xarray.dev/en/stable/generated/xarray.backends.PydapDataStore.html) following methods described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python#h_33df7ebcce). Make sure you use `conda` and install `pydap >= 3.3.0` with:
 
-The following successful solution uses `xr.backends.PydapDataStore` as described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python#h_33df7ebcce).
+```
+$ conda install -c conda-forge pydap
+```
 
+Load entire file for single station:
 ```
 import xarray as xr
 from pydap.client import open_url
 
 stid = 'NUK_Uv3'
-url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}_hour.nc".format(stid,stid)
 
-data_store = xr.backends.PydapDataStore(open_url(url, user_charset='utf-8')) # needs PyDAP >= v3.3.0
+# Read from the "station" THREDDS directory
+url_station = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}_hour.nc".format(stid,stid)
+
+# Read from the "time" THREDDS directory
+url_time = "https://thredds.geus.dk/thredds/dodsC/aws_l3_time_netcdf/level_3/hour/{}_hour.nc".format(stid)
+
+data_store = xr.backends.PydapDataStore(open_url(url_station, user_charset='utf-8'))
 
 data = xr.open_dataset(data_store)
 ```
@@ -116,15 +132,30 @@ Attributes: (12/66)
     _NCProperties:                   version=2,netcdf=4.9.0,hdf5=1.12.2
 ```
 
-Make sure you use `conda` and install `pydap` with:
-
+Use the `PydapDataStore` to takes time "slices":
 ```
-$ conda install -c conda-forge pydap
+# Get all data for a specific day
+data = xr.open_dataset(data_store).sel(time='2023-03-12')
+
+# Get all data for a specific year
+data = xr.open_dataset(data_store).sel(time='2023')
+
+# Get only the latest single obset for this station
+# Both the source time and target time must have same tz awareness
+# NOTE: for promice data, latest hour will only return instantaneous vars (_i).
+# Averages are assigned to start of hour, so _u vars are in the previous hour.
+
+target_time = datetime.now(timezone.utc).replace(tzinfo=None)
+data_latest = xr.open_dataset(data_store).sel(time=target_time, method='nearest')
 ```
 
-Currently you must use a `conda` (or miniconda) env, since pyenv/virtualenv and `pip` only provides `Pydap==3.2.2` (tried with python 3.7, 3.8, 3.9). `conda` provides `Pydap==3.3.0`, which is required to use `xr.backends.PydapDataStore`. I am using a py38 conda environment.
+### Environments and pydap versions
 
-### Errors encountered with other xarray and netCDF4 methods
+Currently you must use a `conda` environment, as pyenv/virtualenv and `pip` only provides `pydap==3.2.2` (tried with python 3.7, 3.8, 3.9). `conda` provides `pydap==3.3.0`, which is required to use `xr.backends.PydapDataStore`. The above code runs in a py38 conda environment.
+
+### Errors encountered with "standard" xarray and netCDF4 methods
+
+With initial testing, pajwr encountered errors with decoding NetCDF files via OPeNDAP with standard methods using `xarray`, `netcdf4` or `pydap` ("standard" meaning most common methods found with Google searching). This issue is present with the GEUS OPeNDAP NetCDF URLs, as well as other THREDDS servers (such as [thredds.ucar.edu](https://thredds.ucar.edu/thredds/catalog/catalog.html)). It is unclear why these simple methods (such as `xr.open_dataset(url)` or `netCDF4.Dataset(url)`) are not working.
 
 Using `xr.open_dataset(url,engine='pydap')` results in:
 `UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 10711: ordinal not in range(128)`
@@ -132,7 +163,7 @@ Using `xr.open_dataset(url,engine='pydap')` results in:
 Using `xr.open_dataset(url,engine='netcdf4')` results in:
 `OSError: [Errno -68] NetCDF: I/O failure`
 
-Using `netCDF4.Dataset(url)` also results in the same `OSError`.
+Using `netCDF4.Dataset(url)` also results in the same `OSError`. This error is further discussed on this [Unidata github issue](https://github.com/Unidata/netcdf4-python/issues/812).
 
 ## Using python and Siphon
 
