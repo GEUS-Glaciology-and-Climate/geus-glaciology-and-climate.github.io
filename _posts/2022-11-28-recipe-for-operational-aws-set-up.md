@@ -11,6 +11,12 @@ tags:
 
 This is a walkthrough guide of the current set-up for fetching `L0 tx` messages and performing `L0` to `L3` processing on both `tx` and `raw` data collected from PROMICE automated weather stations (AWS).
 
+## Architecture
+
+This is the current architecture of our processing set-up. An Azure VM `azure-aws` is used for our operational live processing, whilst an internal server `glacio01` runs in parallel for developments and experimental processing.
+
+![AWS processing architecture](https://raw.githubusercontent.com/GEUS-Glaciology-and-Climate/geus-glaciology-and-climate.github.io/master/assets/images/aws_server_resources.png)
+
 ## Ingredients
 There are several ingredients you need to perform:
 
@@ -36,25 +42,34 @@ pypromice_aws
 │   │       config
 │   └───tx
 │	    config
+│   
+└───aws-operational-processing
+│       l3_processor.sh
+│       bufr_wrapper.sh
+│       restructure_l3.sh
 │
 └───credentials
 │       accounts.ini
 │       credentials.ini
 │       last_aws_uid.ini   
-│   
+│ 
+└───PROMICE-AWS-data-issues
+│   │
+│   └───adjustments
+│   └───flags
+│           
 └───pypromice
     │   setup.py
     │
     └───bin
+    │       getBUFR
     │       getL0TX
     │       getL3
     │       getData
+    │       joinL3
     │
     └───src/pypromice
-            metadata.csv
-            payload_formats.csv
-            payload_types.csv
-            variables.csv
+
 ```
 
 ### AWS L0 Gitlab repo
@@ -86,6 +101,37 @@ And to grab the latest copy of this data, use `git pull` after navigating to the
 git pull
 ```
 
+### aws-operational-processing repo
+
+This is where our wrapper scripts reside for running each processing step.
+
+```
+git clone https://github.com/GEUS-Glaciology-and-Climate/aws-operational-processing.git
+```
+
+The three main scripts used in the processing are `l3_processor.sh`, `bufr_wrapper.sh` and `restructure_l3.sh`. The latter two are called within `l3_processor.sh`. Together, these perform the following steps:
+
+1. Check for remote changes to the `L0` and `L3` Gitlab repositories
+2. `L0 tx` message retrieval
+3. `L3 raw` processing (if any changes are detected in the L0 RAW files
+4. `L3 tx` processing (for files where new L0 TX messages are present)
+5. `L3 raw` and `L3 tx` data merging
+6. Push changes to the `L0` and `L3` Gitlab repositories
+7. Push Level 3 files to fileshare space and thredds server
+8. Perform post quality checks and format instantaneous measurements to BUFR formatting
+9. Push BUFR files
+
+If you don't want to perform one of these steps then please comment these sections out.
+
+This bash script can run routinely using `cron`, which can be accessed using `crontab -e`. 
+
+```
+0 */1 * * * . /home/USR/.bashrc; cd /data/pypromice_aws/aws-operational-processing; ./l3_processor.sh > process_stdout 2>process_stderr
+
+```
+
+In our department, `l3_processor.sh` is set to run once an hour. If you intend to set-up your own operational processing then just make sure to update the directories.
+
 
 ### pypromice
 
@@ -109,7 +155,7 @@ pip install .
 Once the pypromice toolbox is cloned and installed, the toolbox can be checked with its in-built unittesting:
 
 ```
-python -m unittest tx.py aws.py get.py
+python -m unittest src/pypromice/tx/tx.py src/pypromice/process/aws.py src/pypromice/get.py
 ```
 
 Note that for WMO data ingestion development, [eccodes](https://confluence.ecmwf.int/display/ECC/ecCodes+installation), the official package for BUFR encoding and decoding, is needed to perform the BUFR formatting. This can be a tricky installation, so first try to install it with conda-forge:
@@ -124,6 +170,16 @@ If the environment cannot resolve the eccodes installation then follow the steps
 pip3 install eccodes-python
 ```
 
+### PROMICE-AWS-data-issues
+
+This repo is where we retain all manually added edits for flagging and fixing the AWS datasets.
+
+```
+git clone https://github.com/GEUS-Glaciology-and-Climate/PROMICE-AWS-data-issues.git
+```
+
+This flagging and fixing step occurs in the `pypromice` Level 1 `L1` to Level 2 `L2` processing step.
+
 
 ### Credentials for email access
 
@@ -135,22 +191,5 @@ Make a directory called `credentials` and place the following three files in thi
 *Account and credential information is for GEUS Glaciology and Climate personnel only and should never be shared with anyone else.* Please ask the data scientist team for access to these files.
 
 
-### L3 processing bash scripts
 
-One bash script is used to perform:
-1. Check for remote changes to the `L0` and `L3` Gitlab repositories
-2. `L0 tx` message retrieval
-3. `L3 raw` processing (if any changes are detected in the L0 RAW files
-4. `L3 tx` processing (for files where new L0 TX messages are present)
-5. `L3 raw` and `L3 tx` data merging
-6. Push changes to the `L0` and `L3` Gitlab repositories
-If you don't want to perform one of these steps then please comment these sections out.
 
-This bash script can run routinely using `cron`, which can be accessed using `crontab -e`. 
-
-```
-0 */1 * * * . /home/USR/.bashrc; cd /mnt/data/USR/pypromice_aws; ./l3_processor.sh > stdout 2>stderr
-
-```
-
-In our department, `l3_processor.sh` is set to run once an hour. This can be viewed on the [aws-l3 Gitlab README](https://geusgitlab.geus.dk/glaciology-and-climate/promice/aws-l3/-/blob/main/README.md). If you intend to set-up your own operational processing then just make sure to update the directories (signified by the `USR` string).
