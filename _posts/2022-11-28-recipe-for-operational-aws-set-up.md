@@ -170,6 +170,16 @@ If the environment cannot resolve the eccodes installation then follow the steps
 pip3 install eccodes-python
 ```
 
+### PROMICE-AWS-data-issues
+
+This repo is where we retain all manually added edits for flagging and fixing the AWS datasets.
+
+```
+git clone https://github.com/GEUS-Glaciology-and-Climate/PROMICE-AWS-data-issues.git
+```
+
+This flagging and fixing step occurs in the `pypromice` Level 1 `L1` to Level 2 `L2` processing step.
+
 
 ### Credentials for email access
 
