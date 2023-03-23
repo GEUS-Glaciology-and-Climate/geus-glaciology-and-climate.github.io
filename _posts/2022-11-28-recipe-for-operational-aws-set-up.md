@@ -36,11 +36,10 @@ pypromice_aws
 │	    config
 │
 └───aws-l3
-│   │	    
+│   │   AWS_station_locations.csv
+│   │
 │   └───raw
-│   │
 │   └───tx
-│   │
 │   └───level_3
 │   
 └───aws-operational-processing
