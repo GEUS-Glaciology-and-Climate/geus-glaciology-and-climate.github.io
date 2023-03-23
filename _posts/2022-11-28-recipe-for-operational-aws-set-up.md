@@ -27,26 +27,27 @@ These ingredients and their directory structuring is shown below (be aware that 
 
 ```
 pypromice_aws
-│   l3_processor.sh
 │
 └───aws-l0
 │   │	    
-│   └───level_0
+│   └───raw
 │   │       config
 │   └───tx
 │	    config
 │
 └───aws-l3
 │   │	    
-│   └───level_0
-│   │       config
+│   └───raw
+│   │
 │   └───tx
-│	    config
+│   │
+│   └───level_3
 │   
 └───aws-operational-processing
 │       l3_processor.sh
 │       bufr_wrapper.sh
 │       restructure_l3.sh
+│       syn_l3.sh
 │
 └───credentials
 │       accounts.ini
@@ -109,7 +110,7 @@ This is where our wrapper scripts reside for running each processing step.
 git clone https://github.com/GEUS-Glaciology-and-Climate/aws-operational-processing.git
 ```
 
-The three main scripts used in the processing are `l3_processor.sh`, `bufr_wrapper.sh` and `restructure_l3.sh`. The latter two are called within `l3_processor.sh`. Together, these perform the following steps:
+The three main scripts used in the processing are `l3_processor.sh`, `bufr_wrapper.sh`, `restructure_l3.sh` and `sync_l3.sh`. The latter three are called within `l3_processor.sh`. Together, these perform the following steps:
 
 1. Check for remote changes to the `L0` and `L3` Gitlab repositories
 2. `L0 tx` message retrieval
@@ -117,9 +118,9 @@ The three main scripts used in the processing are `l3_processor.sh`, `bufr_wrapp
 4. `L3 tx` processing (for files where new L0 TX messages are present)
 5. `L3 raw` and `L3 tx` data merging
 6. Push changes to the `L0` and `L3` Gitlab repositories
-7. Push Level 3 files to fileshare space and thredds server
+7. Push Level 3 files to the mounted Azure fileshare which then propogates to the thredds server
 8. Perform post quality checks and format instantaneous measurements to BUFR formatting
-9. Push BUFR files
+9. Push BUFR files to the DMI ftp server
 
 If you don't want to perform one of these steps then please comment these sections out.
 
@@ -150,6 +151,12 @@ Then clone the pypromice Github repo and perform a local pip install.
 git clone https://github.com/GEUS-Glaciology-and-Climate/pypromice.git
 cd pypromice
 pip install .
+```
+
+Additional packages are required if you wish to use pypromice's post-processing functionality:
+
+```
+conda install -c conda-forge scikit-learn
 ```
 
 Once the pypromice toolbox is cloned and installed, the toolbox can be checked with its in-built unittesting:
