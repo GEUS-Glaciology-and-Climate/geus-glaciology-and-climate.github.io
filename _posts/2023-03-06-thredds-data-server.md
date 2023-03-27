@@ -51,11 +51,13 @@ The fileshare is mounted on the Azure Thredds VM at `/data/geusgk/awsl3-fileshar
 
 Any data written to a mounted instance of the fileshare is almost instantly replicated both to the cloud (the Azure `geusgk` storage account), and to any other mounted instance. To add new data, you first need to figure out how to write the data to the fileshare. For example, you could set up a process on glacio01 to download an archival (static) dataset from another web location, and then write the data to the mounted fileshare (perhaps using parallel methods in a `screen` session for large datasets).
 
-**NOTE:** For both the Azure aws processing server and the thredds server, pajwr mounted the fileshare using the "on-demand" instructions (see mounting documentation link above). If the server is shutdown and rebooted, this mount probably will not remain. In which case, it might be better to follow the instructions to "Automatically mount file shares" (i.e. register the mount in `fstab`).
+#### On-demand vs automatic mount methods
 
-**NOTE:** The Azure Command Line Interface (CLI) is installed on both Azure VMs (for any command starting with `az`). The Azure Powershell interface is also installed on the thredds VM.
+For both the Azure aws processing server and the thredds server, pajwr mounted the fileshare using the "on-demand" instructions (see mounting documentation link above). If the server is shutdown and rebooted, this mount probably will not remain. In which case, it might be better to follow the instructions to "Automatically mount file shares". This might also give you better control over permissions on the mounted instance.
 
-**NOTE:** If you want to mount the Azure fileshare at another location, the commands in the mounting documentation (linked above) assume you have logged in with `az login` (on glacio01, had to do `az login --use-device-code`). This will take you through the Azure login and auth procedure via a URL and code provided on the command line. You then have to select an account and
+#### az login
+
+If you want to mount the Azure fileshare at another location, the commands in the mounting documentation (linked above) assume you have logged in with `az login` (on glacio01, had to do `az login --use-device-code`). This will take you through the Azure login and auth procedure via a URL and code provided on the command line. You then have to select an account and
 authenticate using Microsoft Authenticator. Successful login should display something like:
 
 ```
@@ -77,6 +79,8 @@ authenticate using Microsoft Authenticator. Successful login should display some
 ]
 ```
 
+The Azure Command Line Interface (CLI) is installed on both Azure VMs (for any command starting with `az`). The Azure Powershell interface is also installed on the thredds VM.
+
 ### 2. Make symlinks to the dataset
 
 Once a new dataset is written to the fileshare, you need to create symlinks to the data so it is visible in the TDS `public` content directory. You can symlink individual files (e.g. `AWS_station_locations.csv`) or directories (e.g. `aws-l3`). For example, a symlink was created for the `aws-l3` directory with:
@@ -87,17 +91,35 @@ $ ln -s /data/geusgk/awsl3-fileshare/aws-l3 /data/content/thredds/public/aws-l3
 
 ### 3. Modify catalog xml files
 
-Once the data is linked to `/data/content/thredds/public`, you need to modify the catalog xml files. These files should be created and/or modified in the `/data/thredds-git` repository. Symlinks for xml catalog and config files point from `/data/content/thredds` to the git repo versions. Commit, add and push any changes.
+Once the data is linked to `/data/content/thredds/public`, you need to modify the catalog xml files. Symlinks for xml catalog and config files point from `/data/content/thredds` to source files in the `/data/thredds-git` repository. Any new xml files should be created in the git repository, with corresponding symlinks created at `/data/content/thredds`. Modification of existing files can be done directly in the repo, or by opening the symlinks. Commit, add and push any changes to the `thredds-git` repo.
 
 `threddsConfig.xml` controls overall configuration for the TDS, and should not normally need modification for adding new data.
 
 For an entirely new dataset, you will want to create a new catalog file. This catalog file will create a top-level directory on the TDS (e.g. `awsl3Catalog.xml` for `Automatic_Weather_Stations` and `cryoclimCatalog.xml` for `CryoClim`). It will be easiest to copy an existing catalog file, and then modify as needed.
 
-You will also need to make a reference to the new catalog file at the bottom of `catalog.xml`, such as:
+You will need to make a reference to the new catalog file at the bottom of `catalog.xml`, such as:
 
 ```
   <catalogRef xlink:title="Automatic_Weather_Stations" xlink:href="awsl3Catalog.xml" name=""/>
   <catalogRef xlink:title="CryoClim" xlink:href="cryoclimCatalog.xml" name=""/>
+  <catalogRef xlink:title="SICE" xlink:href="siceCatalog.xml" name=""/>
+```
+
+You will also need to add any new dataset to the "exclude" list for the AWS "metadata" directory in `awsl3Catalog.xml`, such as:
+
+```
+    <datasetScan name="metadata" id="metadata" path="metadata" location="content/">
+
+      <filter>
+        <include wildcard="*.csv" />
+        <exclude wildcard="aws-l3" atomic="false" collection="true" />
+        <exclude wildcard="aws-l3-flat" atomic="false" collection="true" />
+        <exclude wildcard="cryoclim" atomic="false" collection="true" />
+        <exclude wildcard="SICE" atomic="false" collection="true" />
+        <exclude wildcard="testdata" atomic="false" collection="true" />
+      </filter>
+
+    </datasetScan>
 ```
 
 Getting the data links to display as intended can be difficult (good luck!), but you can **start by following existing patterns in the other catalog files**. The `datasetScan` and `filter` elements are very handy for scanning all files within a directory. Refer to the [TDS tutorial](https://docs.unidata.ucar.edu/tds/current/userguide/index.html) for further information.
@@ -115,7 +137,7 @@ root@thredds:/opt/tomcat/bin# ./startup.sh
 
 Then refresh the production thredds page and you should see your changes. If you are getting a loading wheel for longer than 10-15 seconds, probably something is wrong. There is no information provided at the terminal! You must refer to relevant log files at `/data/content/thredds/logs` or `opt/tomcat/logs`. `opt/tomcat/logs/catalina.out` is a key log file. Often, I just resort to trial and error and restarting Tomcat until content successfully loads.
 
-**NOTE:** Log file rotation needs to be implemented (at least for `catalina.out`), otherwise we will eventually eat up disk space.
+**NOTE:** Log file rotation needs to be implemented (at least for `catalina.out`), otherwise we will eventually eat up disk space!
 
 ## Updating terms of service text
 
