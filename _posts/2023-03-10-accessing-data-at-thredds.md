@@ -31,9 +31,9 @@ Retrieve single file with `wget`:
 wget 'https://thredds.geus.dk/thredds/fileServer/aws_l3_time_netcdf/level_3/hour/CEN1_hour.nc'
 ```
 
-Download an entire catalog with `wget`. In this case, retrieve everything in the `aws_l3_time_netcdf/level_3` directory (includes `day`, `hour` and `month` subdirectories). Note that we also have to exclude (`-X`) unwanted directories, such as `MODIS_*`:
+Download an entire catalog with `wget`. In this case, retrieve everything in the `aws_l3_time_netcdf/level_3` directory (includes `day`, `hour` and `month` subdirectories). Note that we also have to exclude (`-X`) unwanted directories, such as `MODIS_*` and `SICE_*`:
 ```
-wget -e robots=off -nH --cut-dirs 4 -nc -r -l5 -A '*.nc' -R 'catalog*' -I /thredds/fileServer/,/thredds/catalog/ 'https://thredds.geus.dk/thredds/catalog/aws_l3_time_netcdf/level_3/catalog.html' -X thredds/catalog/MODIS_*
+wget -e robots=off -nH --cut-dirs 4 -nc -r -l5 -A '*.nc' -R 'catalog*' -I /thredds/fileServer/,/thredds/catalog/ 'https://thredds.geus.dk/thredds/catalog/aws_l3_time_netcdf/level_3/catalog.html' -X thredds/catalog/MODIS_* -X thredds/catalog/SICE_*
 ```
 
 ## Using python, pandas (csv)
