@@ -147,6 +147,8 @@ There is a built-in method to insert custom user-defined text into the TDS pages
 
 The text is also backed up in the `thredds-git` repo in [terms-of-service-text.html](https://github.com/GEUS-Glaciology-and-Climate/thredds-git/blob/main/terms-of-service-text.html). If the Tomcat and/or TDS software is ever upgraded, this edit to the template file will likely be lost! But it will be easy to add back using the git backup.
 
+**NOTE:** In addition to the Terms of Service text, pajwr made one other modification to the `commonFragments.html` file. The links for the "GEUS THREDDS Data Server" text (in both the header and footer) were incorrect using the defaults. In both the `header-content` and `footer-content` sections, I replaced `th:href="${installUrl}"` with `th:href="${contextPath}"`.
+
 ## DNS and Apache reverse proxy
 
 Jakob Molander at GEUS set up the DNS entry allowing thredds.geus.dk to point at the public IP of the Azure VM running the TDS. 
