@@ -96,7 +96,7 @@ The following will return the single latest obset. Note that for promice data, t
 ds = xr.open_dataset(url).isel(time=-1)
 ```
 
-The above method is equivalent to `xr.open_dataset(url, engine='netcdf4')` (the default engine is `netcdf4`. See docs for `xr.open_dataset` [here](https://docs.xarray.dev/en/stable/generated/xarray.open_dataset.html)). If you encounter errors with this method, the following is an alternative. This uses [`xr.backends.PydapDataStore`](https://docs.xarray.dev/en/stable/generated/xarray.backends.PydapDataStore.html) following methods described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python). Using `conda`, install `pydap >= 3.3.0` with:
+The above method is equivalent to `xr.open_dataset(url, engine='netcdf4')` (the default engine is `netcdf4`. See [docs](https://docs.xarray.dev/en/stable/generated/xarray.open_dataset.html)) for `xr.open_dataset`). If you encounter errors with this method, the following is an alternative. This uses [`xr.backends.PydapDataStore`](https://docs.xarray.dev/en/stable/generated/xarray.backends.PydapDataStore.html) following methods described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python). Using `conda`, install `pydap >= 3.3.0` with:
 ```
 $ conda install -c conda-forge pydap
 ```
@@ -142,7 +142,7 @@ Note that pyenv/virtualenv and `pip` only provides `pydap==3.2.2` (tried with py
 
 ### Errors encountered with "standard" xarray and netCDF4 methods
 
-Using `xr.open_dataset(url, engine='netcdf4')` (the default) can result in:
+Using `xr.open_dataset(url, engine='netcdf4')` (the default `engine`) can result in:
 `OSError: [Errno -68] NetCDF: I/O failure`
 
 Using `netCDF4.Dataset(url)` can also result in the same `OSError`. This error is further discussed on this [Unidata github issue](https://github.com/Unidata/netcdf4-python/issues/812).
