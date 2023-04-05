@@ -143,12 +143,16 @@ Note that pyenv/virtualenv and `pip` only provides `pydap==3.2.2` (tried with py
 ### Errors encountered with "standard" xarray and netCDF4 methods
 
 Using `xr.open_dataset(url, engine='netcdf4')` (the default `engine`) can result in:
-`OSError: [Errno -68] NetCDF: I/O failure`
+```
+OSError: [Errno -68] NetCDF: I/O failure
+```
 
 Using `netCDF4.Dataset(url)` can also result in the same `OSError`. This error is further discussed on this [Unidata github issue](https://github.com/Unidata/netcdf4-python/issues/812).
 
 Using `xr.open_dataset(url, engine='pydap')` can result in:
-`UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 10711: ordinal not in range(128)`
+```
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 10711: ordinal not in range(128)
+```
 
 If you encounter any of these errors, use the alternative `xr.backends.PydapDataStore` method instead.
 
