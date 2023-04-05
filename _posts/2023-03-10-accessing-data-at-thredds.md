@@ -74,7 +74,29 @@ for stid in locations.stid: # this loop takes ~30 sec
 
 ## Using python, xarray, Pydap and OPeNDAP (NetCDF)
 
-The following solution uses [`xr.backends.PydapDataStore`](https://docs.xarray.dev/en/stable/generated/xarray.backends.PydapDataStore.html) following methods described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python). Using `conda`, install `pydap >= 3.3.0` with:
+The simplest method to open a NetCDF file with `xarray` and the OPeNDAP service is:
+```
+import xarray as xr
+
+stid = 'NUK_Uv3'
+
+# Use either the "_time" or "_station" directories.
+# These "/dodsC" URLs are listed in the "Data URL" field if you click on the station's "OPENDAP" link.
+
+url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_time_netcdf/level_3/hour/{}_hour.nc".format(stid)
+#url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}_hour.nc".format(stid,stid)
+
+ds = xr.open_dataset(url)
+```
+
+To make time "slices" use `.sel` or `.isel` methods. For spatial datasets, these methods can also be used to take spatial slices. See the xarray docs for [indexing and selecting data](https://docs.xarray.dev/en/stable/user-guide/indexing.html#indexing-and-selecting-data).
+
+The following will return the single latest obset. Note that for promice data, the latest hour will only return instantaneous vars (`_i`). Averages are assigned to the start of the hour, so `_u` vars are in the previous hour. For more time-slicing examples, see below.
+```
+ds = xr.open_dataset(url).isel(time=-1)
+```
+
+The above method is equivalent to `xr.open_dataset(url, engine='netcdf4')` (the default engine is `netcdf4`. See docs for `xr.open_dataset` [here](https://docs.xarray.dev/en/stable/generated/xarray.open_dataset.html)). If you encounter errors with this method, the following is an alternative. This uses [`xr.backends.PydapDataStore`](https://docs.xarray.dev/en/stable/generated/xarray.backends.PydapDataStore.html) following methods described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python). Using `conda`, install `pydap >= 3.3.0` with:
 ```
 $ conda install -c conda-forge pydap
 ```
@@ -86,8 +108,6 @@ from pydap.client import open_url
 
 stid = 'NUK_Uv3'
 
-# Use either the "_time" or "_station" directories.
-# These "/dodsC" URLs are listed in the "Data URL" field if you click on the station's "OPENDAP" link.
 url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_time_netcdf/level_3/hour/{}_hour.nc".format(stid)
 #url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}_hour.nc".format(stid,stid)
 
@@ -96,45 +116,7 @@ data_store = xr.backends.PydapDataStore(open_url(url, user_charset='utf-8'))
 data = xr.open_dataset(data_store)
 ```
 
-`data` is now an `xarray.Dataset`:
-```
-In [1]: data
-Out[1]: 
-<xarray.Dataset>
-Dimensions:       (time: 22100)
-Coordinates:
-  * time          (time) datetime64[ns] 2020-08-31T15:00:00 ... 2023-03-10T10...
-Data variables: (12/63)
-    p_u           (time) float64 ...
-    t_u           (time) float64 ...
-    rh_u          (time) float64 ...
-    rh_u_cor      (time) float64 ...
-    qh_u          (time) float64 ...
-    wspd_u        (time) float64 ...
-    ...            ...
-    wspd_i        (time) float64 ...
-    wdir_i        (time) float64 ...
-    msg_i         (time) float64 ...
-    lon           float64 ...
-    lat           float64 ...
-    alt           float64 ...
-Attributes: (12/66)
-    station_id:                      NUK_Uv3
-    id:                              dk.geus.promice:2ca065e1-8dca-3fe2-a2bf-...
-    history:                         Generated on 2023-03-10T10:08:09.669905
-    date_created:                    2023-03-10T10:08:09.669919
-    date_modified:                   2023-03-10T10:08:09.669919
-    date_issued:                     2023-03-10T10:08:09.669919
-    ...                              ...
-    publisher_url:                   https://promice.dk
-    references:                      Fausto, R. S., van As, D., Mankoff, K. D...
-    references_bib:                  @article{Fausto2021, doi = {10.5194/essd...
-    standard_name_vocabulary:        CF Standard Name Table (v77, 19 January ...
-    summary:                         \"The Programme for Monitoring of the Gr...
-    _NCProperties:                   version=2,netcdf=4.9.0,hdf5=1.12.2
-```
-
-Before reading the entire file to an in-memory object, use the `PydapDataStore` and `.sel` to take time "slices":
+Use the `PydapDataStore` and `.sel` or `.isel` to take time "slices":
 ```
 from datetime import datetime, timezone
 
@@ -144,10 +126,11 @@ data_day = xr.open_dataset(data_store).sel(time='2023-03-12')
 # Get all data for a specific year
 data_year = xr.open_dataset(data_store).sel(time='2023')
 
-# Get only the latest single obset for this station
-# Both the source time and target time must have same tz awareness
-# NOTE: for promice data, latest hour will only return instantaneous vars (_i).
-# Averages are assigned to start of hour, so _u vars are in the previous hour.
+# Get the latest single obset for this station, using .isel
+data_latest = xr.open_dataset(data_store).isel(time=-1)
+
+# Get the latest single obset using .sel and the 'nearest' method
+# Both the source time and target time must have the same tz awareness
 
 target_time = datetime.now(timezone.utc).replace(tzinfo=None)
 data_latest = xr.open_dataset(data_store).sel(time=target_time, method='nearest')
@@ -155,19 +138,19 @@ data_latest = xr.open_dataset(data_store).sel(time=target_time, method='nearest'
 
 ### Environments and pydap versions
 
-Currently you must use a `conda` environment, as pyenv/virtualenv and `pip` only provides `pydap==3.2.2` (tried with python 3.7, 3.8, 3.9). `conda` (via `conda-forge`) provides `pydap==3.3.0`, which is required to use `xr.backends.PydapDataStore`. The above code runs in a py38 conda environment.
+Note that pyenv/virtualenv and `pip` only provides `pydap==3.2.2` (tried with python 3.7, 3.8, 3.9). If you want to use the `xr.backends.PydapDataStore` method, you need to use `conda` which provides `pydap==3.3.0` via `conda-forge`. The above code runs in a py38 conda environment.
 
 ### Errors encountered with "standard" xarray and netCDF4 methods
 
-With initial testing, pajwr encountered errors with decoding NetCDF files via OPeNDAP with standard methods using `xarray`, `netcdf4` or `pydap` ("standard" meaning most common methods found with Google searching). This issue is present with the GEUS OPeNDAP NetCDF URLs, as well as other THREDDS servers (such as [thredds.ucar.edu](https://thredds.ucar.edu/thredds/catalog/catalog.html)). It is unclear why these simple methods (such as `xr.open_dataset(url)` or `netCDF4.Dataset(url)`) are not working.
-
-Using `xr.open_dataset(url,engine='pydap')` results in:
-`UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 10711: ordinal not in range(128)`
-
-Using `xr.open_dataset(url,engine='netcdf4')` results in:
+Using `xr.open_dataset(url, engine='netcdf4')` (the default) can result in:
 `OSError: [Errno -68] NetCDF: I/O failure`
 
-Using `netCDF4.Dataset(url)` also results in the same `OSError`. This error is further discussed on this [Unidata github issue](https://github.com/Unidata/netcdf4-python/issues/812).
+Using `netCDF4.Dataset(url)` can also result in the same `OSError`. This error is further discussed on this [Unidata github issue](https://github.com/Unidata/netcdf4-python/issues/812).
+
+Using `xr.open_dataset(url, engine='pydap')` can result in:
+`UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 10711: ordinal not in range(128)`
+
+If you encounter any of these errors, use the alternative `xr.backends.PydapDataStore` method instead.
 
 ## Using python and Siphon
 
