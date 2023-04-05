@@ -96,7 +96,9 @@ The following will return the single latest obset. Note that for promice data, t
 ds = xr.open_dataset(url).isel(time=-1)
 ```
 
-The above method is equivalent to `xr.open_dataset(url, engine='netcdf4')` (see [docs](https://docs.xarray.dev/en/stable/generated/xarray.open_dataset.html) for `xr.open_dataset`). If you encounter errors with this method, the following is an alternative. This uses [`xr.backends.PydapDataStore`](https://docs.xarray.dev/en/stable/generated/xarray.backends.PydapDataStore.html) following methods described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python). Using `conda`, install `pydap >= 3.3.0` with:
+This is equivalent to `xr.open_dataset(url, engine='netcdf4')` (see [docs](https://docs.xarray.dev/en/stable/generated/xarray.open_dataset.html) for `xr.open_dataset`).
+
+**If you encounter errors with the above method**, the following is an alternative. This uses [`xr.backends.PydapDataStore`](https://docs.xarray.dev/en/stable/generated/xarray.backends.PydapDataStore.html) following methods described [here](https://help.marine.copernicus.eu/en/articles/5182598-how-to-consume-the-opendap-api-and-cas-sso-using-python). Using `conda`, install `pydap >= 3.3.0` with:
 ```
 $ conda install -c conda-forge pydap
 ```
