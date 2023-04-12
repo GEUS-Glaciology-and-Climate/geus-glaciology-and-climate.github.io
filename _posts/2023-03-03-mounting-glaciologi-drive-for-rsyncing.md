@@ -53,13 +53,13 @@ $ sudo mount -rw -t cifs -o username=<USERNAME>,uid=<UID>,gid=<GID> //172.23.254
 Where `<USERNAME>` is your `glacio01` username, and `<UID>` and `<GID>` are the identifiers associated with your username and your group. If you do not know the `<UID>` and `<GID>` then you can look them up with this command:
 
 ```
-id
+$ id
 ```
 
 Once the `glaciologi` drive is remounted, perform the following `rsync` routine to fetch the latest data:
 
 ```
-sudo rsync -r --exclude .git /mnt/data/aws/pypromice_aws/aws-l3 /media/aws/glaciologi/AWS
+$ sudo rsync -r --exclude .git /mnt/data/aws/pypromice_aws/aws-l3 /media/aws/glaciologi/AWS
 ```
 
 Be aware that you need sudo privileges in order to do this. You may be prompted for two passwords - one for your `glacio01` user and another for your GEUS account (i.e. in order to access the `glaciologi` drive).
@@ -69,6 +69,7 @@ If no new data appears on the `glaciologi` drive after performing these steps th
 
 ### Example of re-mounting steps
 1. Log on to the server
+
 ```
 $ ssh glacio01
 $ pho@glacio01's password: 
@@ -94,14 +95,15 @@ Last login: Mon Mar 27 10:30:08 2023 from 10.10.18.171
 ```
 
 2. Check your user id
+
 ```
 $ id
 
 uid=1009(pho) gid=1009(pho) groups=1009(pho),27(sudo)
-
 ```
 
 3. Re-mount the glaciologi drive
+
 ```
 $ sudo mount -rw -t cifs -o username=pho,uid=1009,gid=1009 //172.23.254.160/glaciologi /media/aws/glaciologi
 
@@ -110,6 +112,7 @@ Password for pho@//172.23.254.160/glaciologi:  ****************
 ```
 
 4. Check the re-mount has worked by searching for files
+
 ```
 $ cd /media/aws/glaciologi
 $ ls -l
