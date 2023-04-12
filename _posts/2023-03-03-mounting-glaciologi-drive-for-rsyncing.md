@@ -68,7 +68,7 @@ If no new data appears on the `glaciologi` drive after performing these steps th
 
 
 ### Example of re-mounting steps
-1. Log on to the server
+- Log on to the server
 
 ```
 $ ssh glacio01
@@ -94,7 +94,7 @@ To see these additional updates run: apt list --upgradable
 Last login: Mon Mar 27 10:30:08 2023 from 10.10.18.171
 ```
 
-2. Check your user id
+- Check your user id
 
 ```
 $ id
@@ -102,7 +102,7 @@ $ id
 uid=1009(pho) gid=1009(pho) groups=1009(pho),27(sudo)
 ```
 
-3. Re-mount the glaciologi drive
+- Re-mount the glaciologi drive
 
 ```
 $ sudo mount -rw -t cifs -o username=pho,uid=1009,gid=1009 //172.23.254.160/glaciologi /media/aws/glaciologi
@@ -111,7 +111,7 @@ $ sudo mount -rw -t cifs -o username=pho,uid=1009,gid=1009 //172.23.254.160/glac
 Password for pho@//172.23.254.160/glaciologi:  ****************
 ```
 
-4. Check the re-mount has worked by searching for files
+- Check the re-mount has worked by searching for files
 
 ```
 $ cd /media/aws/glaciologi
