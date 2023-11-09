@@ -5,9 +5,9 @@ date: 2023-11-09 00:00
 classes: wide
 categories:
   - Guides
-tags: 
+tags:
   - aws
-  - python
+  - pypromice
 ---
 
 There are a couple of steps for making a new pypromice release. This is just a reminder checklist of what these steps are. Please make sure that all steps are completed, and ask if in doubt.
