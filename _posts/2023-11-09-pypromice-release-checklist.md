@@ -57,7 +57,8 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name \
+  }}/{{ name }}-{{ version }}.tar.gz
   sha256: 6934511933611f7d6792c8c75e7306974f367cfef1692adf4e730c3e3b8f4d69
 
 build:
@@ -106,7 +107,9 @@ test:
 
 about:
   home: https://github.com/GEUS-Glaciology-and-Climate/pypromice
-  summary: A toolbox for handling and processing PROMICE (Programme for Monitoring of the Greenland Ice Sheet) and GC-Net (Greenland Climate Network) automated weather station data
+  summary: A toolbox for handling and processing PROMICE (Programme for \
+  Monitoring of the Greenland Ice Sheet) and GC-Net (Greenland Climate \
+  Network) automated weather station data
   license: GPL-2.0
   license_file: LICENSE.txt
   doc_url: https://pypromice.readthedocs.io
