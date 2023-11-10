@@ -44,7 +44,7 @@ Update the authorship list and metadata if needed, and then publish the update.
 
 ## 6. Update the pypromice conda feedstock
 
-The [pypromice conda feedstock](https://github.com/conda-forge/pypromice-feedstock) contains the conda-forge build for pypromice (which is available [here](https://anaconda.org/conda-forge/pypromice)). To update the build to the latest version, make a fork of the feedstock repo (there might be one already [here](https://github.com/GEUS-Glaciology-and-Climate/pypromice-feedstock), make a new branch, and update the `recipe/meta.yaml` file. This can be updated automatically with the `grayskull` package as so:
+The [pypromice conda feedstock](https://github.com/conda-forge/pypromice-feedstock) contains the conda-forge build for pypromice (which is available [here](https://anaconda.org/conda-forge/pypromice)). The new pypi version will automatically be detected in the feedstock and create a new PR for you to review. If you are not happy with the build then you can always make the build yourself and open a new PR on a branch, using the `grayskull` package as so:
 
 ```
 grayskull pypi pypromice
@@ -81,4 +81,4 @@ about:
   dev_url: https://github.com/GEUS-Glaciology-and-Climate/pypromice
 ```
 
-Make a PR between your forked branch and the conda-forge feedstock main branch. Once all checks have passed and the branch has been merged, then the new conda package version should be built.
+Once all checks have passed and the branch has been merged, then the new conda package version should be built.
