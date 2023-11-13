@@ -21,47 +21,43 @@ All public data (including the GEUS network) is accessible free of charge to any
 
 ## Accessing GEUS data using the Weather API service
 
+**NOTE:** All GEUS stations use station IDs in the Synoptic API service with "geus" appended to the ID. For example, South Dome (SDM) is `stid=geussdm`.
+
 ### Sign up
 Signing up is relatively easy, and will provide you with an API key and token. Follow the instructions [here](https://docs.synopticdata.com/services/welcome-to-synoptic-data-s-web-services). **The examples below use `token=demotoken`. Once you have your own token from signing up, please use that instead.** If you have any issues email support@synopticdata.com.
 
 ### Latest service
-Documentation:
-
-https://docs.synopticdata.com/services/latest
+Documentation: https://docs.synopticdata.com/services/latest
 
 Latest observations from the entire GEUS network, all variables, json output:
 
-[https://api.synopticdata.com/v2/stations/latest?network=281&token=demotoken](https://api.synopticdata.com/v2/stations/latest?network=281&token=demotoken)
+https://api.synopticdata.com/v2/stations/latest?network=281&token=demotoken
 
 Latest air temperature for SDM, json output:
 
-[https://api.synopticdata.com/v2/stations/latest?var=air_temp&stid=geussdm&token=demotoken](https://api.synopticdata.com/v2/stations/latest?var=air_temp&stid=GEUSSDM&token=demotoken)
+https://api.synopticdata.com/v2/stations/latest?var=air_temp&stid=geussdm&token=demotoken
 
 ### Timeseries service
-Documentation:
-
-[https://docs.synopticdata.com/services/time-series](https://docs.synopticdata.com/services/time-series)
+Documentation: https://docs.synopticdata.com/services/time-series
 
 Time series for the entire GEUS network, Sept 1 to Nov 1, 2023, json output:
 
-[https://api.synopticdata.com/v2/stations/timeseries?network=281&start=202309010000&end=202311010000&token=demotoken](https://api.synopticdata.com/v2/stations/timeseries?network=281&start=202309010000&end=202311010000&token=demotoken)
+https://api.synopticdata.com/v2/stations/timeseries?network=281&start=202309010000&end=202311010000&token=demotoken
 
 Time series for the entire GEUS network, recent 240 min (4 hrs), json output:
 
-[https://api.synopticdata.com/v2/stations/timeseries?network=281&recent=240&token=demotoken](https://api.synopticdata.com/v2/stations/timeseries?network=281&recent=240&token=demotoken)
+https://api.synopticdata.com/v2/stations/timeseries?network=281&recent=240&token=demotoken
 
 Time series for SDM, Sept 1 to Nov 1, 2023, csv output:
 
-[https://api.synopticdata.com/v2/stations/timeseries?stid=geussdm&start=202309010000&end=202311010000&output=csv&token=demotoken](https://api.synopticdata.com/v2/stations/timeseries?stid=geussdm&start=202309010000&end=202311010000&output=csv&token=demotoken)
+https://api.synopticdata.com/v2/stations/timeseries?stid=geussdm&start=202309010000&end=202311010000&output=csv&token=demotoken
 
 ### Nearest time service
-Documentation:
+Documentation: https://docs.synopticdata.com/services/nearest-time
 
-[https://docs.synopticdata.com/services/nearest-time](https://docs.synopticdata.com/services/nearest-time)
+Nearest observation to Nov 1, 2023 00 UTC, within 90 minutes, entire GEUS network, json output:
 
-Nearest observation to Nov 1, 2023, within 90 minutes, entire GEUS network, json output:
-
-[https://api.synopticdata.com/v2/stations/nearesttime?network=281&attime=202311010000&within=90&token=demotoken](https://api.synopticdata.com/v2/stations/nearesttime?stid=geussdm&attime=202311010000&within=90&token=demotoken)
+https://api.synopticdata.com/v2/stations/nearesttime?network=281&attime=202311010000&within=90&token=demotoken
 
 ### Multiple variables
 Each GEUS station reports multiple versions of each variable. In the API response, `_set_n` will be appended to each variable key in the [time series service](https://docs.synopticdata.com/services/time-series) response (e.g. `air_temp_set_1`), and `_value_n` is used for the [latest service](https://docs.synopticdata.com/services/latest) response (e.g. `air_temp_value_1`).
@@ -80,10 +76,6 @@ By default, all API responses remove any observations failing the Synoptic range
 To enable all basic QC checks, and remove data, include the following in your api call:
 
 `&qc_checks=basic&qc_remove_data=on`
-
-To enable all basic QC checks, do not remove the failed data, but include the flags in the `qc` response key for each variable:
-
-`&qc_checks=basic&qc_remove_data=off&qc_flags=on`
 
 See the [About QC](https://docs.synopticdata.com/services/mesonet-data-qc) documentation for more information on Synoptic's QC, and see the QC arguments for the api within the docs for each service (timeseries, latest, etc).
 
