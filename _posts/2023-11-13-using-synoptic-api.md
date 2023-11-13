@@ -64,9 +64,9 @@ Each GEUS station reports multiple versions of each variable. In the API respons
 
 The mapping between GEUS variables and `_set_n` or `_value_n` is as follows:
 
-hourly average (upper boom), e.g. `t_u`; `_set_1` or `_value_1`
-hourly average (lower boom), e.g. `t_l`; `_set_2` or `_value_2`
-instantaneous (upper boom), e.g. `t_i`; `_set_3` or `_value_3`
+- hourly average (upper boom), e.g. `t_u`; `_set_1` or `_value_1`
+- hourly average (lower boom), e.g. `t_l`; `_set_2` or `_value_2`
+- instantaneous (upper boom), e.g. `t_i`; `_set_3` or `_value_3`
 
 This assignment was chosen to have representation in the API latest service (and the [Synoptic viewer tool](https://viewer.synopticdata.com/)) for the greatest number of stations, using the default `_value_1`. Currently (as of summer 2023) only a subset of GEUS stations report hourly instantaneous data every hour, whereas all stations report hourly averages every hour in the summer (DOY 100-300). In the winter (DOY 300-100) transmissions can go down to 24 hr transmission intervals due to lack of solar. When battery capacity is increased to allow hourly transmissions for instantaneous and hourly ave, year round for all stations, it will likely be better to make set_1 / value_1 the instantaneous ob, as this will better align with what forecasting offices and the WMO more commonly expect.
 
