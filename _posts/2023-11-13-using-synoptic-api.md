@@ -24,7 +24,7 @@ All public data (including the GEUS network) is accessible free of charge to any
 **NOTE:** All GEUS stations use station IDs in the Synoptic API service with "geus" appended to the ID. For example, South Dome (SDM) is `stid=geussdm`.
 
 ### Sign up
-Signing up is relatively easy, and will provide you with an API key and token. Follow the instructions [here](https://docs.synopticdata.com/services/welcome-to-synoptic-data-s-web-services). **The examples below use `token=demotoken`. Once you have your own token from signing up, please use that instead.** If you have any issues email support@synopticdata.com.
+[Signing up](https://docs.synopticdata.com/services/welcome-to-synoptic-data-s-web-services) is relatively easy, and will provide you with an API key and token. **The examples below use `token=demotoken`. Once you have your own token from signing up, please use that instead.** If you have any issues email support@synopticdata.com.
 
 ### Latest service
 Documentation: https://docs.synopticdata.com/services/latest
