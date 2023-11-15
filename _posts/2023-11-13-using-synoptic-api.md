@@ -24,7 +24,7 @@ As with the THREDDS server, any data available via Synoptic services should be c
 # Using the Weather API service
 Documentation: [https://docs.synopticdata.com/services/](https://docs.synopticdata.com/services/)
 
-**NOTE:** All GEUS stations use station IDs in the Synoptic API service with "geus" appended to the ID. For example, South Dome (SDM) is `stid=geussdm`.
+**NOTE:** All GEUS stations use station IDs in the Synoptic API service with "geus" appended to the ID. For example, South Dome (SDM) is `stid=geussdm`. Station elevation by default is returned in feet, and cannot be changed to metric (this is a very unfortunate legacy attribute of the Synoptic API service, and hopefully will change soon).
 
 ## Sign up
 [Signing up](https://docs.synopticdata.com/services/welcome-to-synoptic-data-s-web-services) is relatively easy, and will provide you with an API key and token. **The examples below use `token=demotoken`. Once you have your own token from signing up, please use that token instead.** If you have any issues email support@synopticdata.com.
