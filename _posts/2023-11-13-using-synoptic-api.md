@@ -17,7 +17,7 @@ tags:
 - [Push Streaming service](https://synopticdata.com/value-add-services/push-stream-service/)
 - [Data Viewer tool](https://viewer.synopticdata.com/)
 
-All public data (including the GEUS network) is accessible open access and free of charge to anyone using the data for non-profit and/or academic or research purposes. Synoptic has paid tiers for corporate users and to access [value-add services](https://synopticdata.com/value-add-services/) such as advanced quality control and the Synoptic precipitation service.
+All public data (including the GEUS network) is open access and free of charge to anyone using the data for non-profit, academic or research purposes. Synoptic has paid tiers for corporate users and to access [value-add services](https://synopticdata.com/value-add-services/) such as advanced quality control and the Synoptic precipitation service.
 
 As with the THREDDS server, any data available via Synoptic services should be considered provisional. Synoptic archives historical data, but this archive will only represent data as it was received (no historical re-processing occurs). The API (and other services) should be used primarily for near real-time data applications. Users should go to Dataverse for historical/citable datasets.
 
