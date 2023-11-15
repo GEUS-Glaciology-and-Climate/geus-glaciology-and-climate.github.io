@@ -20,7 +20,7 @@ tags:
 All public data (including the GEUS network) is accessible open access and free of charge to anyone using the data for non-profit and/or academic or research purposes. Synoptic has paid tiers for corporate users and to access [value-add services](https://synopticdata.com/value-add-services/) such as advanced quality control and the Synoptic precipitation service.
 
 # Using the Weather API service
-Documentation: https://docs.synopticdata.com/services/
+Documentation: [https://docs.synopticdata.com/services/](https://docs.synopticdata.com/services/)
 
 **NOTE:** All GEUS stations use station IDs in the Synoptic API service with "geus" appended to the ID. For example, South Dome (SDM) is `stid=geussdm`.
 
@@ -30,47 +30,49 @@ Documentation: https://docs.synopticdata.com/services/
 ## Latest service
 Returns the most recent observation from a station or set of stations.
 
-Documentation: https://docs.synopticdata.com/services/latest
+Documentation: [https://docs.synopticdata.com/services/latest](https://docs.synopticdata.com/services/latest)
 
 **Examples:**
 
 Latest observations from the entire GEUS network, all variables, json output:
 
-https://api.synopticdata.com/v2/stations/latest?network=281&token=demotoken
+[https://api.synopticdata.com/v2/stations/latest?network=281&token=demotoken](https://api.synopticdata.com/v2/stations/latest?network=281&token=demotoken)
 
 Latest air temperature for SDM, json output:
 
-https://api.synopticdata.com/v2/stations/latest?var=air_temp&stid=geussdm&token=demotoken
+[https://api.synopticdata.com/v2/stations/latest?var=air_temp&stid=geussdm&token=demotoken](https://api.synopticdata.com/v2/stations/latest?var=air_temp&stid=geussdm&token=demotoken)
 
 ## Timeseries service
 Returns data for a station or set of stations based on a time span.
 
-Documentation: https://docs.synopticdata.com/services/time-series
+Documentation: [https://docs.synopticdata.com/services/time-series](https://docs.synopticdata.com/services/time-series)
+
+If you prefer csv output, you can use `output=csv`, but only for a single station.
 
 **Examples:**
 
 Timeseries for the entire GEUS network, Sept 1 to Nov 1, 2023, json output:
 
-https://api.synopticdata.com/v2/stations/timeseries?network=281&start=202309010000&end=202311010000&token=demotoken
+[https://api.synopticdata.com/v2/stations/timeseries?network=281&start=202309010000&end=202311010000&token=demotoken](https://api.synopticdata.com/v2/stations/timeseries?network=281&start=202309010000&end=202311010000&token=demotoken)
 
 Time series for the entire GEUS network, recent 240 min (4 hrs), json output:
 
-https://api.synopticdata.com/v2/stations/timeseries?network=281&recent=240&token=demotoken
+[https://api.synopticdata.com/v2/stations/timeseries?network=281&recent=240&token=demotoken](https://api.synopticdata.com/v2/stations/timeseries?network=281&recent=240&token=demotoken)
 
 Time series for SDM, Sept 1 to Nov 1, 2023, csv output:
 
-https://api.synopticdata.com/v2/stations/timeseries?stid=geussdm&start=202309010000&end=202311010000&output=csv&token=demotoken
+[https://api.synopticdata.com/v2/stations/timeseries?stid=geussdm&start=202309010000&end=202311010000&output=csv&token=demotoken](https://api.synopticdata.com/v2/stations/timeseries?stid=geussdm&start=202309010000&end=202311010000&output=csv&token=demotoken)
 
 ## Nearest time service
 Returns the observation closest to the time requested.
 
-Documentation: https://docs.synopticdata.com/services/nearest-time
+Documentation: [https://docs.synopticdata.com/services/nearest-time](https://docs.synopticdata.com/services/nearest-time)
 
 **Examples:**
 
 Nearest observation to Nov 1, 2023 00 UTC, within 90 minutes, entire GEUS network, json output:
 
-https://api.synopticdata.com/v2/stations/nearesttime?network=281&attime=202311010000&within=90&token=demotoken
+[https://api.synopticdata.com/v2/stations/nearesttime?network=281&attime=202311010000&within=90&token=demotoken](https://api.synopticdata.com/v2/stations/nearesttime?network=281&attime=202311010000&within=90&token=demotoken)
 
 ## Accessing multiple variables (instantaneous and hourly averages)
 Each GEUS station reports multiple versions of each variable. In the API response, `_set_n` will be appended to each variable key in the [time series service](https://docs.synopticdata.com/services/time-series) response (e.g. `air_temp_set_1`), and `_value_n` is used for the [latest service](https://docs.synopticdata.com/services/latest) response (e.g. `air_temp_value_1`).
@@ -96,7 +98,7 @@ See the [About QC](https://docs.synopticdata.com/services/mesonet-data-qc) docum
 
 Synoptic recently developed a Viewer tool to enable map-based views and timeseries graphs for weather data. For the GEUS network, see:
 
-https://viewer.synopticdata.com/map/data/now/air-temperature#stationdensity=0&map=3%2F75.38%2F-29.67&networks=281
+[https://viewer.synopticdata.com/map/data/now/air-temperature#stationdensity=0&map=3%2F75.38%2F-29.67&networks=281](https://viewer.synopticdata.com/map/data/now/air-temperature#stationdensity=0&map=3%2F75.38%2F-29.67&networks=281)
 
 This default view uses the latest service with `within=90`, so if there is not data within the last 90 minutes, no observations will appear. I find that this is a useful tool for making sure the GEUS network is alive and well! Note that only `value_1` (hourly ave, upper boom, e.g. `t_u`) are displayed here. During DOY 300-100 (winter), any station that is only reporting daily (00 UTC) will only be visible for 90 minutes after the report.
 
