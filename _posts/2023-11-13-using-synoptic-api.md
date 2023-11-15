@@ -19,6 +19,8 @@ tags:
 
 All public data (including the GEUS network) is accessible open access and free of charge to anyone using the data for non-profit and/or academic or research purposes. Synoptic has paid tiers for corporate users and to access [value-add services](https://synopticdata.com/value-add-services/) such as advanced quality control and the Synoptic precipitation service.
 
+As with the THREDDS server, any data available via Synoptic services should be considered provisional. Synoptic archives historical data, but this archive will only represent data as it was received (no historical re-processing occurs). The API (and other services) should be used primarily for near real-time data applications. Users should go to Dataverse for historical/citable datasets.
+
 # Using the Weather API service
 Documentation: [https://docs.synopticdata.com/services/](https://docs.synopticdata.com/services/)
 
