@@ -10,6 +10,10 @@ tags:
   - github
 ---
 
+Most of our continual integration is automated, as shown below. But there are a couple of things that need to be checked at each step to ensure that everything is approved, released, and runs smoothly.
+
+![GEUS logo](https://raw.githubusercontent.com/GEUS-Glaciology-and-Climate/geus-glaciology-and-climate.github.io/master/assets/images/pypromice_package_builds_big.png) 
+
 ## 1. Change the pypromice package version
 
 When a new pypromice version is due, make a new branch on the [pypromice Github repo](https://github.com/GEUS-Glaciology-and-Climate/pypromice) and change the `version` in the [setup.py](https://github.com/GEUS-Glaciology-and-Climate/pypromice/blob/main/setup.py) file. Remember to use semantic versioning, specifying a major (e.g. `v1.0.0`), minor (e.g.`v0.1.0`) or patch (e.g. `v0.0.1`) version depending on the nature of the updates to pypromice
