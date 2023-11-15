@@ -32,7 +32,7 @@ Returns the most recent observation from a station or set of stations.
 
 Documentation: https://docs.synopticdata.com/services/latest
 
-### Examples
+**Examples:**
 
 Latest observations from the entire GEUS network, all variables, json output:
 
@@ -47,7 +47,7 @@ Returns data for a station or set of stations based on a time span.
 
 Documentation: https://docs.synopticdata.com/services/time-series
 
-### Examples
+**Examples:**
 
 Timeseries for the entire GEUS network, Sept 1 to Nov 1, 2023, json output:
 
@@ -66,7 +66,7 @@ Returns the observation closest to the time requested.
 
 Documentation: https://docs.synopticdata.com/services/nearest-time
 
-### Examples
+**Examples:**
 
 Nearest observation to Nov 1, 2023 00 UTC, within 90 minutes, entire GEUS network, json output:
 
