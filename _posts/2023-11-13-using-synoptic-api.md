@@ -139,5 +139,5 @@ The assigment using `time=-1` and `time=-2` to collect data expects the followin
 
 When stations switch to daily reporting at 00 UTC during DOY 300-100 (winter), instantaneous and hourly averages are reported together, both at 00 UTC. In that case, we use `time=-1` and assign the 00 UTC timestamp to both.
 
-All station metadata reported in the Synoptic API (lat, lon, elev, station IDs) is read from https://thredds.geus.dk/thredds/fileServer/metadata/AWS_latest_locations.csv. Synoptic periodically reviews for new stations, or relocated/moved stations, and will update their databases. This will occur at least once per year (but usually more frequently) to account for icesheet movement or any other station relocation.
+All station metadata reported in the Synoptic API (lat, lon, elev, station IDs) is read from [https://thredds.geus.dk/thredds/fileServer/metadata/AWS_latest_locations.csv](https://thredds.geus.dk/thredds/fileServer/metadata/AWS_latest_locations.csv). Synoptic periodically reviews for new stations, or relocated/moved stations, and will update their databases. This will occur at least once per year (but usually more frequently) to account for icesheet movement or any other station relocation.
 
