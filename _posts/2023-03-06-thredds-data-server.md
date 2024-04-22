@@ -37,6 +37,20 @@ support-thredds@unidata.ucar.edu
 - Apache web server: `/etc/apache2`
 - Java install: `/usr/lib/jvm/java-1.11.0-openjdk-amd64`
 
+## Troubleshooting
+If the Thredds server is down, the first thing to try is restarting the Tomcat web server. First, switch to root user with `su -`.
+```
+./ /opt/tomcat/bin/shutdown.sh
+./ /opt/tomcat/bin/startup.sh
+```
+If that doesn't work, then try restarting the Apache web server, and then restart the Tomcat server again.
+```
+sudo service apache2 restart
+```
+Also keep in mind that if you have not implemented any log file rotation, the server can easily fill disk space. You may need to clear log files and free up disk space.
+
+If things are still down, your best bet it to start looking through logs at `/opt/tomcat/bin/log`, check out the FAQs at the Thredds tutorial site, and potentially contact Thredds support.
+
 ## Adding new data
 
 To add any new dataset, you will need ssh access to the Azure Thredds VM instance. Contact [Penny How](https://github.com/PennyHow) for obtaining an ssh key. Any user with the ssh key can access the server through the open port 22. This allows access from home, from Greenland, etc. Please treat these ssh keys carefully, and only share via secure methods (internal geus email addresses, over Slack, etc). The current key is `aws-dec2022.pem` and should occasionally be rotated by creating a new key on the Azure portal.
