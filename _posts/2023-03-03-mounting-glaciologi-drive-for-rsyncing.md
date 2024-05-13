@@ -47,7 +47,7 @@ It is likely that you will be prompted for your username and password. Please re
 Next, we can remount the `glaciologi` drive as so:
 
 ```
-$ sudo mount -rw -t cifs -o username=<USERNAME>,uid=<UID>,gid=<GID> //172.23.254.160/glaciologi /media/aws/glaciologi
+$ sudo mount -rw -t cifs -o username=<USERNAME>,uid=<UID>,gid=<GID> //#IP_ADDRESS/glaciologi /media/aws/glaciologi
 ```
 
 Where `<USERNAME>` is your `glacio01` username, and `<UID>` and `<GID>` are the identifiers associated with your username and your group. If you do not know the `<UID>` and `<GID>` then you can look them up with this command:
@@ -75,40 +75,21 @@ $ ssh glacio01
 $ pho@glacio01's password: 
 
 Welcome to Ubuntu 18.04.6 LTS (GNU/Linux 4.15.0-208-generic x86_64)
-
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-  System information as of Wed Apr 12 13:39:29 CEST 2023
-
-  System load:  0.16                Processes:              561
-  Usage of /:   54.4% of 195.80GB   Users logged in:        1
-  Memory usage: 1%                  IP address for ens192:  172.23.247.131
-  Swap usage:   0%                  IP address for docker0: 172.17.0.1
-
-48 updates can be applied immediately.
-To see these additional updates run: apt list --upgradable
-
-
-Last login: Mon Mar 27 10:30:08 2023 from 10.10.18.171
 ```
 
 - Check your user id
 
 ```
 $ id
-
-uid=1009(pho) gid=1009(pho) groups=1009(pho),27(sudo)
 ```
 
 - Re-mount the glaciologi drive
 
 ```
-$ sudo mount -rw -t cifs -o username=pho,uid=1009,gid=1009 //172.23.254.160/glaciologi /media/aws/glaciologi
+$ sudo mount -rw -t cifs -o username=pho,uid=#ID,gid=#ID //172.23.254.160/glaciologi /media/aws/glaciologi
 
 [sudo] password for pho: 
-Password for pho@//172.23.254.160/glaciologi:  ****************
+Password for pho@//#IP_ADDRESS/glaciologi:  ****************
 ```
 
 - Check the re-mount has worked by searching for files
@@ -119,7 +100,6 @@ $ ls -l
 
 total 180085
 drwxr-xr-x 2 pho pho        0 Dec  5  2017 '10971 - AWSsalg'
--rwxr-xr-x 1 pho pho   154089 May 17  2016  13-GEUS-SVALI_partner_finance_report2016.xlsx
 -rwxr-xr-x 1 pho pho       40 May  3  2019  437BE3F4A354
 drwxr-xr-x 2 pho pho        0 Oct 23  2019  79North
 drwxr-xr-x 2 pho pho        0 Nov 18  2013  aerial_150K
