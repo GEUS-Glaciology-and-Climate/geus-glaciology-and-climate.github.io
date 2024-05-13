@@ -54,7 +54,7 @@ You will need certain files with pieces of account information to fetch `L0 TX` 
 Run the script from the command line as follows, exchanging each variable input for your chosen file names and directories, and the transmission messages should begin to appear in the output directory:
 
 ```
-getL0tx -a accounts.ini -p credentials.ini -c config/ -f payload_formats.csv -t payload_types.csv -u last_aws_uid.ini -o out_dir/
+get_l0tx -a accounts.ini -p credentials.ini -c config/ -f payload_formats.csv -t payload_types.csv -u last_aws_uid.ini -o out_dir/
 ```
 
 The output files will be `.txt` formatting, comma delimited, with one message per line.
