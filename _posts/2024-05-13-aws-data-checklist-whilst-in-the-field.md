@@ -16,7 +16,8 @@ tags:
 
 - Check the current status of the automated weather station (AWS) site that you are visiting. If you do not have adequate internet to look at the most recent station data then contact the data scientist team who can check for you. The following locations are where you can check station data (in order of preference):
     * [Our thredds server](https://thredds.geus.dk/) for Level 3 near-real-time data
-    * [The promice website](https://promice.org/weather-stations/) for Level 0 near-real-time data
+    * [Our Grafana portal](http://glacio01.geus.dk:3000/d/c8df2f00-a5c8-4696-8c3f-fb66acc9001e/station-weather?orgId=1) for Level 3 near-real-time data
+    * [The promice website](https://promice.org/weather-stations/) for Level 0 data updated daily
     * [Our Level 0 repository](https://geusgitlab.geus.dk/glaciology-and-climate/promice/aws-l0) for Level 0 near-real-time data
 
 - Turn on your GPS tracking and share the link with the data scientist team. The data scientist team can then see which station you are visiting each day without having direct communication
