@@ -22,18 +22,18 @@ This guide should be updated with any additional data access methods that are us
 
 Using the graphic user interface (GUI) on the browser, you can navigate to individual files in the TDS directory. Both csv and [NetCDF](https://www.unidata.ucar.edu/software/netcdf/) files can be accessed as a simple "click and download" via the HTTP file download method.
 
-NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) (which has it's own browser GUI page for each station) and other data access methods listed for individual files. For example, see the data access services listed for [KAN_U](https://thredds.geus.dk/thredds/catalog/aws_l3_station_netcdf/level_3/KAN_U/catalog.html?dataset=aws_l3_station_netcdf/level_3/KAN_U/KAN_U_hour.nc)). The services landing page is useful to scrape URLs for use in programmatic access methods. See [here](https://www.ncei.noaa.gov/access/thredds-user-guide) for a concise explanation of the available TDS data access services.
+NetCDF can also be accessed using [OPeNDAP](https://www.opendap.org/) (which has it's own browser GUI page for each station) and other data access methods listed for individual files. For example, see the data access services listed for [KAN_U](https://thredds.geus.dk/thredds/fileServer/aws/l3sites/netcdf/hour/KAN_U_hour.nc). The services landing page is useful to scrape URLs for use in programmatic access methods. See [here](https://www.ncei.noaa.gov/access/thredds-user-guide) for a concise explanation of the available TDS data access services.
 
 ## Command-line
 
 Retrieve single file with `wget`:
 ```
-wget 'https://thredds.geus.dk/thredds/fileServer/aws_l3_time_netcdf/level_3/hour/CEN1_hour.nc'
+wget 'https://thredds.geus.dk/thredds/fileServer/aws/l3sites/netcdf/hour/CEN1_hour.nc'
 ```
 
-Download an entire catalog with `wget`. In this case, retrieve everything in the `aws_l3_time_netcdf/level_3` directory (includes `day`, `hour` and `month` subdirectories). Note that we also have to exclude (`-X`) unwanted directories, such as `MODIS_*` and `SICE_*`:
+Download an entire catalog with `wget`. In this case, retrieve everything in the `l3sites/netcdf` directory (includes `day`, `hour` and `month` subdirectories):
 ```
-wget -e robots=off -nH --cut-dirs 4 -nc -r -l5 -A '*.nc' -R 'catalog*' -I /thredds/fileServer/,/thredds/catalog/ 'https://thredds.geus.dk/thredds/catalog/aws_l3_time_netcdf/level_3/catalog.html' -X thredds/catalog/MODIS_* -X thredds/catalog/SICE_*
+wget -e robots=off -nH --cut-dirs 4 -nc -r -l5 -A '*.nc' -R 'catalog*' -I /thredds/fileServer/,/thredds/catalog/ 'https://thredds.geus.dk/thredds/catalog/aws/l3sites/netcdf/catalog.html'
 ```
 
 ## Using python, pandas (csv)
@@ -44,9 +44,8 @@ import pandas as pd
 
 stid = 'NUK_Uv3'
 
-# Use either the "_time" or "_station" directories:
-url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_time_csv/level_3/hour/{}_hour.csv".format(stid)
-#url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_station_csv/level_3/{}/{}_hour.csv".format(stid,stid)
+# Use the csv file directory
+url = "https://thredds.geus.dk/thredds/fileServer/aws/l3sites/csv/hour/{}_hour.csv".format(stid)
 
 data = pd.read_csv(url)
 
@@ -60,12 +59,12 @@ Read all stations (csv) with `pandas`, make dictionary of dataframes:
 import pandas as pd
 
 # Read AWS_station_locations.csv to get station names
-url_locations = "https://thredds.geus.dk/thredds/fileServer/metadata/AWS_station_locations.csv"
+url_locations = "https://thredds.geus.dk/thredds/fileServer/aws/metadata/AWS_latest_locations.csv"
 locations = pd.read_csv(url_locations)
 
 data = {}
 for stid in locations.stid: # this loop takes ~30 sec
-  stn_url = "https://thredds.geus.dk/thredds/fileServer/aws_l3_time_csv/level_3/hour/{}_hour.csv".format(stid)
+  stn_url = "https://thredds.geus.dk/thredds/fileServer/aws/l3sites/csv/hour/{}_hour.csv".format(stid)
   df = pd.read_csv(stn_url)
   df.set_index(pd.to_datetime(df.time), inplace=True)
   df.drop(['time'], axis=1, inplace=True) # drop original time column
@@ -75,6 +74,7 @@ for stid in locations.stid: # this loop takes ~30 sec
 ## Using python, xarray, Pydap and OPeNDAP (NetCDF)
 
 The simplest method to open a NetCDF file with `xarray` and the OPeNDAP service is:
+
 ```
 import xarray as xr
 
@@ -83,9 +83,7 @@ stid = 'NUK_Uv3'
 # Use either the "_time" or "_station" directories.
 # These "/dodsC" URLs are listed in the "Data URL" field if you click on the station's "OPENDAP" link.
 
-url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_time_netcdf/level_3/hour/{}_hour.nc".format(stid)
-#url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}_hour.nc".format(stid,stid)
-
+url = "https://thredds.geus.dk/thredds/dodsC/aws/l3sites/netcdf/hour/{}_hour.nc".format(stid)
 ds = xr.open_dataset(url)
 ```
 
@@ -110,8 +108,7 @@ from pydap.client import open_url
 
 stid = 'NUK_Uv3'
 
-url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_time_netcdf/level_3/hour/{}_hour.nc".format(stid)
-#url = "https://thredds.geus.dk/thredds/dodsC/aws_l3_station_netcdf/level_3/{}/{}_hour.nc".format(stid,stid)
+url = "https://thredds.geus.dk/thredds/dodsC/aws/l3sites/netcdf/hour/{}_hour.nc".format(stid)
 
 data_store = xr.backends.PydapDataStore(open_url(url, user_charset='utf-8'))
 

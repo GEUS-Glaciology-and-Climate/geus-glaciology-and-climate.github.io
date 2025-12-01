@@ -24,10 +24,8 @@ The `pypromice` package should be used to fetch transmission messages, specifica
 
 ```
 # Create environment with conda
-conda create --name pypromice python=3.8
+conda create --name pypromice python=3.11
 conda activate pypromice
-conda install xarray pandas pathlib
-pip install netCDF4
 
 # Clone repository
 git clone https://github.com/GEUS-Glaciology-and-Climate/pypromice.git
@@ -45,16 +43,16 @@ You will need certain files with pieces of account information to fetch `L0 TX` 
 
 - The IMAP address and account name for where transmission messages are collected, stored in an `.ini` file (e.g. `accounts.ini`)
 - The account password, also stored in an `.ini` file (e.g. `credentials.ini`) 
-- The directory of config `.toml` files for all the AWS' that you wish to grab `L0 TX` messages from
+- The directory of the config `.toml` files for all the AWS' that you wish to grab `L0 TX` messages from
 - `payload_formats.csv` and `payload_types.csv` files for decoding messages, which are provided in the `pypromice` repo
-- The message number you want to start grabbing messages from, in a file called something like `last_aws_uid.ini`. Message `1 000 000` is around Spring 2021, for reference
+- The message number you want to start grabbing messages from, in a file called something like `last_aws_uid.ini`.
 - The output directory (e.g. `out_dir`) for fetched `L0 TX` files
 
 
 Run the script from the command line as follows, exchanging each variable input for your chosen file names and directories, and the transmission messages should begin to appear in the output directory:
 
 ```
-get_l0tx -a accounts.ini -p credentials.ini -c config/ -f payload_formats.csv -t payload_types.csv -u last_aws_uid.ini -o out_dir/
+get_l0tx -a accounts.ini -p credentials.ini -c config/ -u last_aws_uid.ini -o out_dir/
 ```
 
 The output files will be `.txt` formatting, comma delimited, with one message per line.

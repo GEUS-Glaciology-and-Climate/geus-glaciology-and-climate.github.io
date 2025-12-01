@@ -11,6 +11,7 @@ tags:
   - promice
   - cryoclim
 ---
+<u>**!! Note this is an old document and all new THREDDS updates can be found [here](https://geusgitlab.geus.dk/glaciology-and-climate/promice/thredds) !!**</u>
 
 ## THREDDS background
 

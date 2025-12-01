@@ -10,6 +10,7 @@ tags:
   - pypromice
   - wmo
 ---
+<u>**!! This page may be out-of-date. Please read documentation [here](https://geusgitlab.geus.dk/glaciology-and-climate/promice/aws-operational-processing) for the latest uupdates !!**</u>
 
 The following is a background and guide to the processing of BUFR files for submission of PROMICE and GC-Net data to the [World Meteorological Organization](https://public.wmo.int/en) (WMO), via ftp upload to the [Danish Meteorological Institute](https://www.dmi.dk/) (DMI).
 
