@@ -1,6 +1,6 @@
 Patrick Wright:
   name: "Patrick Wright"
-  bio: "Data scientist"
+  bio: "Consultant"
   avatar: "https://avatars0.githubusercontent.com/u/10144675?s=460&v=4"
   links:
     - label: "Email"
@@ -21,6 +21,3 @@ Penelope How:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/PennyHow"
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/DrPennyHow"
